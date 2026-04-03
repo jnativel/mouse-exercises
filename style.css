@@ -60,6 +60,45 @@ body {
     line-height: 1.4;
 }
 
+
+.sidebar-menu-title {
+    margin-top: 20px;
+}
+
+.exercise-menu-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.exercise-menu-link {
+    display: block;
+    background: #ffffff;
+    border: 2px solid #9e9e9e;
+    border-radius: 8px;
+    color: #1f1f1f;
+    font-size: 22px;
+    font-weight: bold;
+    line-height: 1.35;
+    padding: 12px 14px;
+    text-decoration: none;
+}
+
+.exercise-menu-link:hover,
+.exercise-menu-link:focus {
+    background: #e8f1ff;
+    border-color: #1e88e5;
+    outline: none;
+}
+
+.exercise-menu-link.is-active {
+    background: #dff3e2;
+    border-color: #2e7d32;
+}
+
 .card {
     background: #f4f4f4;
     border: 1px solid #cfcfcf;
@@ -286,7 +325,8 @@ body {
     .smiley-helper,
     .btn,
     .status-box,
-    .sidebar-box p {
+    .sidebar-box p,
+    .exercise-menu-link {
         font-size: 20px;
     }
 }

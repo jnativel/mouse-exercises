@@ -19,6 +19,9 @@ $exerciseInstruction = $exerciseInstruction ?? '';
 $sidebarTitle = $sidebarTitle ?? 'Informations';
 $sidebarContent = $sidebarContent ?? '';
 $mainContent = $mainContent ?? '';
+
+require_once __DIR__ . '/exercise-menu.php';
+$exerciseMenu = renderExerciseMenu();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -57,6 +60,11 @@ $mainContent = $mainContent ?? '';
         <h2><?= htmlspecialchars($sidebarTitle, ENT_QUOTES, 'UTF-8') ?></h2>
         <div class="sidebar-box">
             <?= $sidebarContent ?>
+        </div>
+
+        <h2 class="sidebar-menu-title">Exercices</h2>
+        <div class="sidebar-box">
+            <?= $exerciseMenu ?>
         </div>
     </aside>
 </div>
