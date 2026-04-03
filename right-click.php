@@ -1,0 +1,227 @@
+<?php
+declare(strict_types=1);
+
+/**
+ * Exemple d'URL :
+ * right-click.php?action=right-click&items=6&size=100
+ * right-click.php?action=clic-droit&items=12&size=120
+ */
+
+$action = isset($_GET['action']) ? trim((string) $_GET['action']) : 'right-click';
+$items  = isset($_GET['items']) ? (int) $_GET['items'] : 6;
+$size   = isset($_GET['size']) ? (int) $_GET['size'] : 100;
+
+if ($items < 1) {
+    $items = 1;
+}
+if ($items > 100) {
+    $items = 100;
+}
+
+if ($size < 40) {
+    $size = 40;
+}
+if ($size > 200) {
+    $size = 200;
+}
+
+$normalizedAction = strtolower($action);
+$isRightClickExercise = in_array($normalizedAction, ['right-click', 'clic-droit', 'click-right', 'clique-droit'], true);
+
+$pageTitle = 'Exercices souris';
+$exerciseTitle = 'Clic droit (x ' . $items . ')';
+
+if ($isRightClickExercise) {
+    $exerciseInstruction = 'Faites un clic droit sur un smiley. Un menu va apparaître. Cliquez ensuite sur “Supprimer”.';
+} else {
+    $exerciseInstruction = 'L’action demandée n’est pas reconnue.';
+}
+
+ob_start();
+
+if ($isRightClickExercise): ?>
+    <div class="exercise-zone" id="exercise-zone">
+        <?php for ($i = 1; $i <= $items; $i++): ?>
+            <div class="smiley-item context-target" data-item>
+                <div class="smiley-helper">Supprimez-moi !</div>
+
+                <button
+                    type="button"
+                    class="smiley-btn"
+                    data-action="right-click"
+                    aria-label="Smiley <?= $i ?>"
+                >
+                    <span
+                        class="smiley"
+                        style="width: <?= (int) $size ?>px; height: <?= (int) $size ?>px;"
+                    >
+                        <span class="smiley-face">
+                            <span class="eye left"></span>
+                            <span class="eye right"></span>
+                            <span class="mouth"></span>
+                        </span>
+                    </span>
+                </button>
+
+                <div class="fake-context-menu" hidden>
+                    <button type="button" class="fake-context-item" disabled>Nouveau</button>
+                    <button type="button" class="fake-context-item" disabled>Couper</button>
+                    <button type="button" class="fake-context-item" disabled>Copier</button>
+                    <button type="button" class="fake-context-item" disabled>Renommer</button>
+                    <button type="button" class="fake-context-item is-delete" data-delete>Supprimer</button>
+                </div>
+            </div>
+        <?php endfor; ?>
+    </div>
+
+    <div class="status-box">
+        Restants : <span id="remaining-count"><?= (int) $items ?></span> / <?= (int) $items ?>
+    </div>
+
+    <div class="menu-note" id="menu-note">
+        Astuce : faites d’abord un clic droit sur le smiley.
+    </div>
+
+    <div class="success-message" id="success-message">
+        Bravo ! Tous les smileys ont été supprimés.
+    </div>
+
+    <div class="controls">
+        <a
+            class="btn btn-orange"
+            href="?action=<?= urlencode($action) ?>&items=<?= (int) $items ?>&size=<?= (int) $size ?>"
+        >
+            Recommencer
+        </a>
+
+        <a
+            class="btn btn-green"
+            href="?action=right-click&items=12&size=100"
+        >
+            Exemple suivant
+        </a>
+    </div>
+
+    <script>
+        (function () {
+            'use strict';
+
+            const zone = document.getElementById('exercise-zone');
+            const remainingCount = document.getElementById('remaining-count');
+            const successMessage = document.getElementById('success-message');
+            const menuNote = document.getElementById('menu-note');
+
+            if (!zone) {
+                return;
+            }
+
+            let remaining = zone.querySelectorAll('[data-item]').length;
+
+            function closeAllMenus() {
+                zone.querySelectorAll('.fake-context-menu').forEach(function (menu) {
+                    menu.hidden = true;
+                });
+            }
+
+            zone.addEventListener('contextmenu', function (event) {
+                const button = event.target.closest('.smiley-btn');
+
+                if (!button) {
+                    return;
+                }
+
+                event.preventDefault();
+
+                const item = button.closest('[data-item]');
+                if (!item || item.classList.contains('is-done')) {
+                    return;
+                }
+
+                const menu = item.querySelector('.fake-context-menu');
+                if (!menu) {
+                    return;
+                }
+
+                const wasHidden = menu.hidden;
+                closeAllMenus();
+                menu.hidden = !wasHidden ? true : false;
+
+                if (menuNote) {
+                    menuNote.textContent = 'Cliquez maintenant sur “Supprimer”.';
+                }
+            });
+
+            zone.addEventListener('click', function (event) {
+                const deleteButton = event.target.closest('[data-delete]');
+
+                if (deleteButton) {
+                    const item = deleteButton.closest('[data-item]');
+                    if (!item || item.classList.contains('is-done')) {
+                        return;
+                    }
+
+                    item.classList.add('is-done');
+                    const menu = item.querySelector('.fake-context-menu');
+                    if (menu) {
+                        menu.hidden = true;
+                    }
+
+                    remaining--;
+
+                    if (remainingCount) {
+                        remainingCount.textContent = String(remaining);
+                    }
+
+                    if (menuNote && remaining > 0) {
+                        menuNote.textContent = 'Très bien. Recommencez : clic droit puis “Supprimer”.';
+                    }
+
+                    if (remaining <= 0 && successMessage) {
+                        successMessage.style.display = 'block';
+                        if (menuNote) {
+                            menuNote.textContent = 'Exercice terminé.';
+                        }
+                    }
+
+                    return;
+                }
+
+                const clickedMenu = event.target.closest('.fake-context-menu');
+                const clickedButton = event.target.closest('.smiley-btn');
+
+                if (!clickedMenu && !clickedButton) {
+                    closeAllMenus();
+                }
+            });
+
+            document.addEventListener('click', function (event) {
+                if (!zone.contains(event.target)) {
+                    closeAllMenus();
+                }
+            });
+
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape') {
+                    closeAllMenus();
+                }
+            });
+        })();
+    </script>
+<?php else: ?>
+    <div class="error-box">
+        Action non reconnue.
+    </div>
+<?php endif;
+
+$mainContent = (string) ob_get_clean();
+
+$sidebarTitle = 'Informations';
+$sidebarContent = '
+    <p><strong>Action :</strong> ' . htmlspecialchars($action, ENT_QUOTES, 'UTF-8') . '</p>
+    <p><strong>Nombre d’items :</strong> ' . $items . '</p>
+    <p><strong>Taille :</strong> ' . $size . ' px</p>
+    <p><strong>But :</strong> faire un clic droit puis choisir Supprimer.</p>
+    <p><strong>Exemple :</strong> ?action=right-click&amp;items=6&amp;size=100</p>
+';
+
+require __DIR__ . '/template.php';
