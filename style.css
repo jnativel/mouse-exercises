@@ -181,26 +181,24 @@ body {
     font-weight: bold;
     line-height: 1.5;
     margin: 0;
-    transition: color 0.25s ease, transform 0.25s ease;
+    padding: 10px 14px;
+    border-radius: 10px;
+    transition: color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
 }
 
 .instruction.is-success-feedback {
-    color: #2e7d32;
+    color: #1b5e20;
+    background: #dff3e2;
+    box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.3) inset;
     transform: scale(1.01);
-    background: #fbe38d;
-    border: 2px solid #2e7d32;
-    border-radius: 10px;
-    padding: 10px 14px;
     animation: instruction-success-pop 420ms ease-out both;
 }
 
 
 .instruction.is-timeout-feedback {
-    color: #c62828;
-    background: #ffe5e5;
-    border: 2px solid #c62828;
-    border-radius: 10px;
-    padding: 10px 14px;
+    color: #b71c1c;
+    background: #ffe3e3;
+    box-shadow: 0 0 0 2px rgba(198, 40, 40, 0.3) inset;
     animation: instruction-timeout-pulse 950ms ease-in-out infinite;
 }
 
@@ -379,6 +377,10 @@ body {
     opacity: 0.55;
     cursor: not-allowed;
     pointer-events: none;
+}
+
+.btn.is-hidden {
+    display: none;
 }
 
 .status-box {
