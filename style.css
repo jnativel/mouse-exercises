@@ -120,6 +120,12 @@ body {
     font-weight: bold;
     line-height: 1.5;
     margin: 0;
+    transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.instruction.is-success-feedback {
+    color: #2e7d32;
+    transform: scale(1.01);
 }
 
 .exercise-zone {
