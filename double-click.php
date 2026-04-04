@@ -27,6 +27,15 @@ if ($size > 200) {
 
 $normalizedAction = strtolower($action);
 $isDoubleClickExercise = in_array($normalizedAction, ['double-click', 'double-clic', 'double-clic-gauche'], true);
+require_once __DIR__ . '/exercise-menu.php';
+$nextExercise = getNextExerciseMenuItem(basename(__FILE__), 'double-click', $items);
+$nextHref = $nextExercise
+    ? $nextExercise['file'] . '?' . http_build_query([
+        'action' => $nextExercise['action'],
+        'items' => $nextExercise['items'],
+        'size' => $nextExercise['size'],
+    ])
+    : '?action=' . urlencode($action) . '&items=' . (int) $items . '&size=' . (int) $size;
 
 $pageTitle = 'Exercices souris';
 $exerciseTitle = 'Double clic (x ' . $items . ')';
@@ -84,7 +93,7 @@ if ($isDoubleClickExercise): ?>
 
         <a
             class="btn btn-green"
-            href="?action=double-click&items=12&size=100"
+            href="<?= htmlspecialchars($nextHref, ENT_QUOTES, 'UTF-8') ?>"
         >
             Exemple suivant
         </a>
