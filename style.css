@@ -167,6 +167,10 @@ body {
     padding: 22px;
 }
 
+.card.is-hidden {
+    display: none;
+}
+
 .exercise-title {
     text-align: center;
     font-size: 38px;
@@ -181,24 +185,34 @@ body {
     font-weight: bold;
     line-height: 1.5;
     margin: 0;
-    padding: 10px 14px;
-    border-radius: 10px;
-    transition: color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
 }
 
-.instruction.is-success-feedback {
+.feedback-card {
+    transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.feedback-message {
+    text-align: center;
+    font-size: 48px;
+    font-weight: bold;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.feedback-card.is-success-feedback {
     color: #1b5e20;
     background: #dff3e2;
-    box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.3) inset;
+    border-color: #9ccc9f;
+    box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.25) inset;
     transform: scale(1.01);
     animation: instruction-success-pop 420ms ease-out both;
 }
 
-
-.instruction.is-timeout-feedback {
+.feedback-card.is-timeout-feedback {
     color: #b71c1c;
     background: #ffe3e3;
-    box-shadow: 0 0 0 2px rgba(198, 40, 40, 0.3) inset;
+    border-color: #ef9a9a;
+    box-shadow: 0 0 0 2px rgba(198, 40, 40, 0.22) inset;
     animation: instruction-timeout-pulse 950ms ease-in-out infinite;
 }
 
@@ -463,12 +477,12 @@ body {
         animation: none;
     }
 
-    .instruction {
+    .feedback-card {
         transition: none;
     }
 
-    .instruction.is-success-feedback,
-    .instruction.is-timeout-feedback {
+    .feedback-card.is-success-feedback,
+    .feedback-card.is-timeout-feedback {
         animation: none;
     }
 }
@@ -509,6 +523,10 @@ body {
 
     .instruction {
         font-size: 22px;
+    }
+
+    .feedback-message {
+        font-size: 34px;
     }
 
     .smiley-helper,
