@@ -3,25 +3,44 @@ declare(strict_types=1);
 
 /**
  * Configuration centralisée du menu des exercices.
+ * Chaque entrée représente un type d'exercice, avec ses étapes internes.
  *
- * @return array<int, array{label: string, file: string, action: string, items: int, size: int}>
+ * @return array<int, array{label: string, file: string, action: string, size: int, stages: int[]}>
  */
 function getExerciseMenuItems(): array
 {
     return [
-        ['label' => 'Clic gauche (x 04)', 'file' => 'click-left.php', 'action' => 'click-left', 'items' => 4, 'size' => 100],
-        ['label' => 'Clic gauche (x 12)', 'file' => 'click-left.php', 'action' => 'click-left', 'items' => 12, 'size' => 100],
-        ['label' => 'Double clic (x 04)', 'file' => 'double-click.php', 'action' => 'double-click', 'items' => 4, 'size' => 100],
-        ['label' => 'Double clic (x 12)', 'file' => 'double-click.php', 'action' => 'double-click', 'items' => 12, 'size' => 100],
-        ['label' => 'Clic droit (x 04)', 'file' => 'right-click.php', 'action' => 'right-click', 'items' => 4, 'size' => 100],
-        ['label' => 'Clic droit (x 12)', 'file' => 'right-click.php', 'action' => 'right-click', 'items' => 12, 'size' => 100],
-        ['label' => 'Glisser déposer (x 02)', 'file' => 'drag-drop.php', 'action' => 'drag-drop', 'items' => 2, 'size' => 100],
-        ['label' => 'Glisser déposer (x 08)', 'file' => 'drag-drop.php', 'action' => 'drag-drop', 'items' => 8, 'size' => 100],
-        ['label' => 'Copier coller (x 02)', 'file' => 'copy-paste.php', 'action' => 'copy-paste', 'items' => 2, 'size' => 100],
-        ['label' => 'Copier coller (x 08)', 'file' => 'copy-paste.php', 'action' => 'copy-paste', 'items' => 8, 'size' => 100],
-        ['label' => 'Couper coller (x 02)', 'file' => 'cut-paste.php', 'action' => 'cut-paste', 'items' => 2, 'size' => 100],
-        ['label' => 'Couper coller (x 08)', 'file' => 'cut-paste.php', 'action' => 'cut-paste', 'items' => 8, 'size' => 100],
+        ['label' => 'Clic gauche', 'file' => 'click-left.php', 'action' => 'click-left', 'size' => 100, 'stages' => [4, 12]],
+        ['label' => 'Double clic', 'file' => 'double-click.php', 'action' => 'double-click', 'size' => 100, 'stages' => [4, 12]],
+        ['label' => 'Clic droit', 'file' => 'right-click.php', 'action' => 'right-click', 'size' => 100, 'stages' => [4, 12]],
+        ['label' => 'Glisser déposer', 'file' => 'drag-drop.php', 'action' => 'drag-drop', 'size' => 100, 'stages' => [2, 8]],
+        ['label' => 'Copier coller', 'file' => 'copy-paste.php', 'action' => 'copy-paste', 'size' => 100, 'stages' => [2, 8]],
+        ['label' => 'Couper coller', 'file' => 'cut-paste.php', 'action' => 'cut-paste', 'size' => 100, 'stages' => [2, 8]],
     ];
+}
+
+/**
+ * Déplie le menu en séquence d'étapes pour la navigation précédente/suivante.
+ *
+ * @return array<int, array{label: string, file: string, action: string, items: int, size: int}>
+ */
+function getExerciseStepSequence(): array
+{
+    $steps = [];
+
+    foreach (getExerciseMenuItems() as $item) {
+        foreach ($item['stages'] as $stageItems) {
+            $steps[] = [
+                'label' => $item['label'],
+                'file' => $item['file'],
+                'action' => $item['action'],
+                'items' => $stageItems,
+                'size' => $item['size'],
+            ];
+        }
+    }
+
+    return $steps;
 }
 
 /**
@@ -31,8 +50,7 @@ function renderExerciseMenu(
     ?string $currentScript = null,
     ?string $currentAction = null,
     ?int $currentItems = null
-): string
-{
+): string {
     $currentScript = $currentScript ?? basename((string) ($_SERVER['PHP_SELF'] ?? ''));
     $normalizedCurrentAction = is_string($currentAction) ? strtolower(trim($currentAction)) : null;
 
@@ -40,16 +58,16 @@ function renderExerciseMenu(
     $html .= '<ul class="exercise-menu-list">';
 
     foreach (getExerciseMenuItems() as $item) {
+        $firstStageItems = (int) ($item['stages'][0] ?? 1);
         $query = http_build_query([
             'action' => $item['action'],
-            'items' => $item['items'],
+            'items' => $firstStageItems,
             'size' => $item['size'],
         ]);
 
         $href = $item['file'] . '?' . $query;
         $isActive = $currentScript === $item['file']
-            && $normalizedCurrentAction === strtolower($item['action'])
-            && $currentItems === $item['items'];
+            && $normalizedCurrentAction === strtolower($item['action']);
 
         $html .= '<li class="exercise-menu-item">';
         $html .= '<a class="exercise-menu-link' . ($isActive ? ' is-active' : '') . '" href="' . htmlspecialchars($href, ENT_QUOTES, 'UTF-8') . '">';
@@ -65,11 +83,11 @@ function renderExerciseMenu(
 }
 
 /**
- * Retourne l'index de l'exercice courant dans le menu.
+ * Retourne l'index de l'étape courante dans la séquence pédagogique.
  */
 function getCurrentExerciseMenuIndex(string $currentScript, string $currentAction, int $currentItems): ?int
 {
-    $menuItems = getExerciseMenuItems();
+    $menuItems = getExerciseStepSequence();
     $normalizedCurrentAction = strtolower(trim($currentAction));
 
     foreach ($menuItems as $index => $item) {
@@ -86,13 +104,13 @@ function getCurrentExerciseMenuIndex(string $currentScript, string $currentActio
 }
 
 /**
- * Retourne l'exercice précédent défini dans le menu.
+ * Retourne l'exercice précédent défini dans la séquence.
  *
  * @return array{label: string, file: string, action: string, items: int, size: int}|null
  */
 function getPreviousExerciseMenuItem(string $currentScript, string $currentAction, int $currentItems): ?array
 {
-    $menuItems = getExerciseMenuItems();
+    $menuItems = getExerciseStepSequence();
     $currentIndex = getCurrentExerciseMenuIndex($currentScript, $currentAction, $currentItems);
 
     if ($currentIndex === null || $currentIndex <= 0) {
@@ -103,13 +121,13 @@ function getPreviousExerciseMenuItem(string $currentScript, string $currentActio
 }
 
 /**
- * Retourne le prochain exercice défini dans le menu.
+ * Retourne le prochain exercice défini dans la séquence.
  *
  * @return array{label: string, file: string, action: string, items: int, size: int}|null
  */
 function getNextExerciseMenuItem(string $currentScript, string $currentAction, int $currentItems): ?array
 {
-    $menuItems = getExerciseMenuItems();
+    $menuItems = getExerciseStepSequence();
     $currentIndex = getCurrentExerciseMenuIndex($currentScript, $currentAction, $currentItems);
 
     if ($currentIndex === null) {
