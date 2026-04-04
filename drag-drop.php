@@ -59,7 +59,7 @@ ob_start();
 if ($isDragDropExercise): ?>
     <div id="dragdrop-exercise">
         <?php for ($i = 1; $i <= $items; $i++): ?>
-            <div class="dragdrop-row" data-row>
+            <div class="dragdrop-row completion-hideable" data-row>
                 <div class="dragdrop-side">
                     <div class="dragdrop-label">Glissez-moi !</div>
 
@@ -95,11 +95,11 @@ if ($isDragDropExercise): ?>
             </div>
         <?php endfor; ?>
 
-        <div class="status-box">
+        <div class="status-box completion-hideable">
             Restants : <span id="remaining-count"><?= (int) $items ?></span> / <?= (int) $items ?>
         </div>
 
-        <div class="menu-note" id="drag-note">
+        <div class="menu-note completion-hideable" id="drag-note">
             Astuce : cliquez, gardez appuyé, déplacez, puis relâchez.
         </div>
 
@@ -163,6 +163,11 @@ if ($isDragDropExercise): ?>
                 nextStepButton.classList.remove('is-disabled');
                 nextStepButton.removeAttribute('aria-disabled');
                 nextStepButton.removeAttribute('tabindex');
+            }
+
+            function completeExercise() {
+                exercise.classList.add('exercise-complete');
+                enableNextStep();
             }
 
             exercise.querySelectorAll('.drag-smiley').forEach(function (dragItem) {
@@ -239,11 +244,10 @@ if ($isDragDropExercise): ?>
                     }
 
                     if (remaining <= 0 && successMessage) {
-                        successMessage.style.display = 'block';
+                        completeExercise();
                         if (dragNote) {
                             dragNote.textContent = 'Exercice terminé.';
                         }
-                        enableNextStep();
                     }
                 });
             });

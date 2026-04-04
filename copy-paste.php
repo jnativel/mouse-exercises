@@ -59,7 +59,7 @@ ob_start();
 if ($isCopyPasteExercise): ?>
     <div class="copy-paste-wrapper" id="copy-paste-exercise">
         <?php for ($i = 1; $i <= $items; $i++): ?>
-            <div class="copy-paste-row" data-row data-id="item-<?= $i ?>">
+            <div class="copy-paste-row completion-hideable" data-row data-id="item-<?= $i ?>">
                 <div class="copy-paste-side copy-origin" data-copy-origin>
                     <div class="copy-paste-label">Copiez-moi !</div>
 
@@ -108,11 +108,11 @@ if ($isCopyPasteExercise): ?>
             </div>
         <?php endfor; ?>
 
-        <div class="status-box">
+        <div class="status-box completion-hideable">
             Restants : <span id="remaining-count"><?= (int) $items ?></span> / <?= (int) $items ?>
         </div>
 
-        <div class="menu-note" id="copy-note">
+        <div class="menu-note completion-hideable" id="copy-note">
             Astuce : clic droit sur le smiley, choisissez “Copier”, puis clic droit sur “Collez-moi !” et choisissez “Coller”.
         </div>
 
@@ -176,6 +176,11 @@ if ($isCopyPasteExercise): ?>
                 nextStepButton.classList.remove('is-disabled');
                 nextStepButton.removeAttribute('aria-disabled');
                 nextStepButton.removeAttribute('tabindex');
+            }
+
+            function completeExercise() {
+                exercise.classList.add('exercise-complete');
+                enableNextStep();
             }
 
             function closeAllMenus() {
@@ -379,11 +384,10 @@ if ($isCopyPasteExercise): ?>
                     }
 
                     if (remaining <= 0 && successMessage) {
-                        successMessage.style.display = 'block';
+                        completeExercise();
                         if (copyNote) {
                             copyNote.textContent = 'Exercice terminé.';
                         }
-                        enableNextStep();
                     }
 
                     return;
