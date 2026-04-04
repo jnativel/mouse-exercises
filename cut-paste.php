@@ -139,8 +139,11 @@ if ($isCutPasteExercise): ?>
 
             <?php if ($nextHref !== null): ?>
                 <a
-                    class="btn btn-green"
+                    class="btn btn-green is-disabled"
+                    id="next-step-button"
                     href="<?= htmlspecialchars($nextHref, ENT_QUOTES, 'UTF-8') ?>"
+                    aria-disabled="true"
+                    tabindex="-1"
                 >
                     Étape suivante
                 </a>
@@ -156,6 +159,7 @@ if ($isCutPasteExercise): ?>
             const remainingCount = document.getElementById('remaining-count');
             const successMessage = document.getElementById('success-message');
             const copyNote = document.getElementById('copy-note');
+            const nextStepButton = document.getElementById('next-step-button');
 
             if (!exercise) {
                 return;
@@ -163,6 +167,16 @@ if ($isCutPasteExercise): ?>
 
             let cutId = null;
             let remaining = exercise.querySelectorAll('[data-row]').length;
+
+            function enableNextStep() {
+                if (!nextStepButton) {
+                    return;
+                }
+
+                nextStepButton.classList.remove('is-disabled');
+                nextStepButton.removeAttribute('aria-disabled');
+                nextStepButton.removeAttribute('tabindex');
+            }
 
             function clearCutPreview() {
                 exercise.querySelectorAll('[data-cut-source].is-cut').forEach(function (button) {
@@ -377,6 +391,7 @@ if ($isCutPasteExercise): ?>
                         if (copyNote) {
                             copyNote.textContent = 'Exercice terminé.';
                         }
+                        enableNextStep();
                     }
 
                     return;

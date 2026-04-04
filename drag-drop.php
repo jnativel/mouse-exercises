@@ -126,8 +126,11 @@ if ($isDragDropExercise): ?>
 
             <?php if ($nextHref !== null): ?>
                 <a
-                    class="btn btn-green"
+                    class="btn btn-green is-disabled"
+                    id="next-step-button"
                     href="<?= htmlspecialchars($nextHref, ENT_QUOTES, 'UTF-8') ?>"
+                    aria-disabled="true"
+                    tabindex="-1"
                 >
                     Étape suivante
                 </a>
@@ -143,6 +146,7 @@ if ($isDragDropExercise): ?>
             const remainingCount = document.getElementById('remaining-count');
             const successMessage = document.getElementById('success-message');
             const dragNote = document.getElementById('drag-note');
+            const nextStepButton = document.getElementById('next-step-button');
 
             if (!exercise) {
                 return;
@@ -150,6 +154,16 @@ if ($isDragDropExercise): ?>
 
             let draggedId = null;
             let remaining = exercise.querySelectorAll('[data-row]').length;
+
+            function enableNextStep() {
+                if (!nextStepButton) {
+                    return;
+                }
+
+                nextStepButton.classList.remove('is-disabled');
+                nextStepButton.removeAttribute('aria-disabled');
+                nextStepButton.removeAttribute('tabindex');
+            }
 
             exercise.querySelectorAll('.drag-smiley').forEach(function (dragItem) {
                 dragItem.addEventListener('dragstart', function (event) {
@@ -229,6 +243,7 @@ if ($isDragDropExercise): ?>
                         if (dragNote) {
                             dragNote.textContent = 'Exercice terminé.';
                         }
+                        enableNextStep();
                     }
                 });
             });
@@ -243,4 +258,3 @@ if ($isDragDropExercise): ?>
 $mainContent = (string) ob_get_clean();
 
 require __DIR__ . '/template.php';
-
