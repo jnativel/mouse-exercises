@@ -78,6 +78,10 @@ if ($isDragDropExercise): ?>
             </div>
             <?php endif; ?>
 
+        <div class="menu-note completion-hideable" id="drag-note">
+            Astuce : cliquez sur le smiley, gardez appuyé, déplacez la sourie dans la zone, puis relâchez.
+        </div>
+
         <?php for ($i = 1; $i <= $items; $i++): ?>
             <div class="dragdrop-row completion-hideable" data-row>
                 <div class="dragdrop-side">
@@ -117,9 +121,6 @@ if ($isDragDropExercise): ?>
 
         <div class="status-box completion-hideable remaining-box" aria-hidden="true">
             Restants : <span id="remaining-count"><?= (int) $items ?></span> / <?= (int) $items ?>
-        </div>
-        <div class="menu-note completion-hideable" id="drag-note">
-            Astuce : cliquez, gardez appuyé, déplacez, puis relâchez.
         </div>
 
         <div class="controls">

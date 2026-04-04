@@ -349,7 +349,7 @@ body {
     justify-content: center;
     gap: 20px;
     flex-wrap: wrap;
-    padding-top: 10px;
+    padding-top: 40px;
 }
 
 .btn {
@@ -572,7 +572,7 @@ body {
 }
 
 .menu-note {
-    margin-top: 16px;
+    margin-bottom: 25px;
     text-align: center;
     font-size: 20px;
     font-weight: bold;

@@ -10,7 +10,7 @@ declare(strict_types=1);
 function getExerciseMenuItems(): array
 {
     return [
-        ['label' => 'Clic gauche', 'file' => 'click-left.php', 'action' => 'click-left', 'size' => 100, 'stages' => [4, 12]],
+        ['label' => 'Clic', 'file' => 'click-left.php', 'action' => 'click-left', 'size' => 100, 'stages' => [4, 12]],
         ['label' => 'Double clic', 'file' => 'double-click.php', 'action' => 'double-click', 'size' => 100, 'stages' => [4, 12]],
         ['label' => 'Clic droit', 'file' => 'right-click.php', 'action' => 'right-click', 'size' => 100, 'stages' => [4, 12]],
         ['label' => 'Glisser déposer', 'file' => 'drag-drop.php', 'action' => 'drag-drop', 'size' => 100, 'stages' => [2, 8]],
@@ -27,7 +27,7 @@ function getExerciseMenuItems(): array
 function getExerciseMenuChronoItems(): array
 {
     return [
-        ['label' => 'Clic gauche', 'file' => 'click-left.php', 'action' => 'click-left', 'size' => 100, 'stages' => [4], 'delay' => [0.7, 1.4, 2.8]],
+        ['label' => 'Clic', 'file' => 'click-left.php', 'action' => 'click-left', 'size' => 100, 'stages' => [4], 'delay' => [0.7, 1.4, 2.8]],
         ['label' => 'Double clic', 'file' => 'double-click.php', 'action' => 'double-click', 'size' => 100, 'stages' => [4], 'delay' => [0.8, 1.6, 3.2]],
         ['label' => 'Clic droit', 'file' => 'right-click.php', 'action' => 'right-click', 'size' => 100, 'stages' => [4], 'delay' => [1.5, 3, 6]],
         ['label' => 'Glisser déposer', 'file' => 'drag-drop.php', 'action' => 'drag-drop', 'size' => 100, 'stages' => [2], 'delay' => [1.5, 3, 6]],

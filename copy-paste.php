@@ -77,6 +77,10 @@ if ($isCopyPasteExercise): ?>
             </div>
         <?php endif; ?>
 
+        <div class="menu-note completion-hideable" id="copy-note">
+            Astuce : clic droit sur le smiley, choisissez “Copier”, puis clic droit au dessous “Collez-moi !” et choisissez “Coller”.
+        </div>
+
         <?php for ($i = 1; $i <= $items; $i++): ?>
             <div class="copy-paste-row completion-hideable" data-row data-id="item-<?= $i ?>">
                 <div class="copy-paste-side copy-origin" data-copy-origin>
@@ -129,9 +133,6 @@ if ($isCopyPasteExercise): ?>
 
         <div class="status-box completion-hideable remaining-box" aria-hidden="true">
             Restants : <span id="remaining-count"><?= (int) $items ?></span> / <?= (int) $items ?>
-        </div>
-        <div class="menu-note completion-hideable" id="copy-note">
-            Astuce : clic droit sur le smiley, choisissez “Copier”, puis clic droit sur “Collez-moi !” et choisissez “Coller”.
         </div>
 
         <div class="controls">
@@ -412,7 +413,7 @@ if ($isCopyPasteExercise): ?>
                     updatePasteMenus();
 
                     if (copyNote) {
-                        copyNote.textContent = 'Très bien. Faites maintenant un clic droit sur “Collez-moi !”.';
+                        copyNote.textContent = 'Très bien. Faites maintenant un clic droit au dessous de “Collez-moi !”.';
                     }
 
                     return;

@@ -78,6 +78,10 @@ if ($isRightClickExercise): ?>
         </div>
         <?php endif; ?>
 
+        <div class="menu-note completion-hideable" id="menu-note">
+            Astuce : faites d’abord un clic droit sur le smiley.
+        </div>
+
     <div class="exercise-zone completion-hideable" id="exercise-zone">
         <?php for ($i = 1; $i <= $items; $i++): ?>
             <div class="smiley-item context-target" data-item>
@@ -114,9 +118,6 @@ if ($isRightClickExercise): ?>
 
     <div class="status-box completion-hideable remaining-box" aria-hidden="true">
         Restants : <span id="remaining-count"><?= (int) $items ?></span> / <?= (int) $items ?>
-    </div>
-    <div class="menu-note completion-hideable" id="menu-note">
-        Astuce : faites d’abord un clic droit sur le smiley.
     </div>
 
     <div class="controls">
