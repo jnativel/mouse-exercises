@@ -148,7 +148,7 @@ if ($isLeftClickExercise): ?>
             function completeExercise() {
                 enableNextStep();
                 if (instruction) {
-                    instruction.textContent = 'Bravo ! Tous les smileys ont été supprimés.';
+                    instruction.textContent = 'Bravo ! Tous les smileys ont été cliqués.';
                     instruction.classList.add('is-success-feedback');
                 }
             }
