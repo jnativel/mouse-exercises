@@ -528,12 +528,7 @@ body {
     position: relative;
 }
 
-.copy-origin.is-copied .smiley-btn {
-    opacity: 0.45;
-}
-
 .copy-origin.is-done .smiley-btn {
-    opacity: 0.25;
     pointer-events: none;
 }
 
