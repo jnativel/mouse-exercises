@@ -151,14 +151,36 @@ if ($isRightClickExercise): ?>
                 });
             }
 
+            function positionMenuAtClick(menu, event, container) {
+                menu.hidden = false;
+
+                const rect = container.getBoundingClientRect();
+                const menuWidth = menu.offsetWidth;
+                const menuHeight = menu.offsetHeight;
+                const margin = 4;
+
+                const relativeX = event.clientX - rect.left;
+                const relativeY = event.clientY - rect.top;
+
+                const maxX = Math.max(margin, rect.width - menuWidth - margin);
+                const maxY = Math.max(margin, rect.height - menuHeight - margin);
+
+                const left = Math.max(margin, Math.min(relativeX, maxX));
+                const top = Math.max(margin, Math.min(relativeY, maxY));
+
+                menu.style.left = left + 'px';
+                menu.style.top = top + 'px';
+            }
+
             zone.addEventListener('contextmenu', function (event) {
+                event.preventDefault();
+
                 const button = event.target.closest('.smiley-btn');
 
                 if (!button) {
+                    closeAllMenus();
                     return;
                 }
-
-                event.preventDefault();
 
                 const item = button.closest('[data-item]');
                 if (!item || item.classList.contains('is-done')) {
@@ -172,7 +194,11 @@ if ($isRightClickExercise): ?>
 
                 const wasHidden = menu.hidden;
                 closeAllMenus();
-                menu.hidden = !wasHidden ? true : false;
+                if (!wasHidden) {
+                    menu.hidden = true;
+                } else {
+                    positionMenuAtClick(menu, event, item);
+                }
 
                 if (menuNote) {
                     menuNote.textContent = 'Cliquez maintenant sur “Supprimer”.';
@@ -244,4 +270,3 @@ if ($isRightClickExercise): ?>
 $mainContent = (string) ob_get_clean();
 
 require __DIR__ . '/template.php';
-
