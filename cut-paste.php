@@ -490,7 +490,7 @@ if ($isCutPasteExercise): ?>
                     if (remaining <= 0) {
                         completeExercise();
                         if (copyNote) {
-                            copyNote.textContent = 'Exercice terminé. Vous pouvez passer à l’étape suivante.';
+                            copyNote.textContent = 'Exercice terminé.';
                         }
                     }
 
