@@ -78,7 +78,36 @@ body {
     display: grid;
     grid-template-columns: 1fr;
     gap: 8px;
-    margin: 40px 20px 20px;
+    margin: 12px 20px 20px;
+}
+
+.exercise-mode-toggle {
+    margin: 20px 0 0;
+}
+
+.exercise-mode-toggle summary {
+    cursor: pointer;
+    color: #1e4f8a;
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: underline;
+    list-style: none;
+}
+
+.exercise-mode-toggle summary::-webkit-details-marker {
+    display: none;
+}
+
+.exercise-mode-toggle-label-minus {
+    display: none;
+}
+
+.exercise-mode-toggle[open] .exercise-mode-toggle-label-plus {
+    display: none;
+}
+
+.exercise-mode-toggle[open] .exercise-mode-toggle-label-minus {
+    display: inline;
 }
 
 .exercise-mode-link {
@@ -158,6 +187,10 @@ body {
 .instruction.is-success-feedback {
     color: #2e7d32;
     transform: scale(1.01);
+    background: #dff3e2;
+    border: 2px solid #2e7d32;
+    border-radius: 10px;
+    padding: 10px 14px;
     animation: instruction-success-pop 420ms ease-out both;
 }
 
