@@ -19,6 +19,8 @@ function getExerciseMenuItems(): array
         ['label' => 'Glisser déposer (x 08)', 'file' => 'drag-drop.php', 'action' => 'drag-drop', 'items' => 8, 'size' => 100],
         ['label' => 'Copier coller (x 02)', 'file' => 'copy-paste.php', 'action' => 'copy-paste', 'items' => 2, 'size' => 100],
         ['label' => 'Copier coller (x 08)', 'file' => 'copy-paste.php', 'action' => 'copy-paste', 'items' => 8, 'size' => 100],
+        ['label' => 'Couper coller (x 02)', 'file' => 'cut-paste.php', 'action' => 'cut-paste', 'items' => 2, 'size' => 100],
+        ['label' => 'Couper coller (x 08)', 'file' => 'cut-paste.php', 'action' => 'cut-paste', 'items' => 8, 'size' => 100],
     ];
 }
 
