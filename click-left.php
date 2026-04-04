@@ -33,7 +33,7 @@ $mode = normalizeExerciseMode($mode);
 $chronoDelay = getChronoDelayForAction('click-left', $mode);
 $countdownSeconds = $chronoDelay !== null ? $items * $chronoDelay : null;
 $countdownDisplay = $countdownSeconds !== null
-    ? rtrim(rtrim(number_format($countdownSeconds, 1, '.', ''), '0'), '.')
+    ? (string) max(0, (int) round($countdownSeconds))
     : null;
 $previousExercise = getPreviousExerciseMenuItem(basename(__FILE__), 'click-left', $items);
 $previousHref = $previousExercise
@@ -99,6 +99,9 @@ if ($isLeftClickExercise): ?>
     <?php if ($countdownSeconds !== null): ?>
     <div class="status-box completion-hideable">
         Temps : <span id="countdown-value"><?= htmlspecialchars((string) $countdownDisplay, ENT_QUOTES, 'UTF-8') ?></span>s
+        <div class="countdown-progress" aria-hidden="true">
+            <div class="countdown-progress-bar" id="countdown-progress"></div>
+        </div>
     </div>
     <?php endif; ?>
 
@@ -143,6 +146,7 @@ if ($isLeftClickExercise): ?>
             const nextStepButton = document.getElementById('next-step-button');
             const instruction = document.querySelector('.instruction');
             const countdownValue = document.getElementById('countdown-value');
+            const countdownProgress = document.getElementById('countdown-progress');
             const restartButton = exercise.querySelector('.btn-orange');
 
             if (!zone || !exercise) {
@@ -154,6 +158,7 @@ if ($isLeftClickExercise): ?>
             let isCompleted = false;
             let timerId = null;
             let remainingSeconds = <?= $countdownSeconds !== null ? (float) $countdownSeconds : 'null' ?>;
+            const initialSeconds = typeof remainingSeconds === 'number' ? remainingSeconds : null;
 
             function enableNextStep() {
                 if (!nextStepButton) {
@@ -199,19 +204,27 @@ if ($isLeftClickExercise): ?>
                 });
 
                 if (instruction) {
-                    instruction.textContent = 'Temps écoulé. Game over ! Vous pouvez uniquement recommencer.';
+                    instruction.textContent = 'Temps écoulé. Vous pouvez uniquement recommencer.';
                     instruction.classList.remove('is-success-feedback');
                 }
             }
 
             function formatSeconds(value) {
                 const normalizedValue = Number.isFinite(value) ? Math.max(0, value) : 0;
-                return Number.isInteger(normalizedValue)
-                    ? String(normalizedValue)
-                    : normalizedValue.toFixed(1);
+                return String(Math.round(normalizedValue));
+            }
+
+            function updateProgressBar() {
+                if (!countdownProgress || typeof initialSeconds !== 'number' || initialSeconds <= 0) {
+                    return;
+                }
+
+                const ratio = Math.max(0, Math.min(1, remainingSeconds / initialSeconds));
+                countdownProgress.style.width = (ratio * 100).toFixed(1) + '%';
             }
 
             if (typeof remainingSeconds === 'number' && countdownValue) {
+                updateProgressBar();
                 timerId = window.setInterval(function () {
                     if (isCompleted || isGameOver) {
                         return;
@@ -219,6 +232,7 @@ if ($isLeftClickExercise): ?>
 
                     remainingSeconds = Math.max(0, Number((remainingSeconds - 0.1).toFixed(1)));
                     countdownValue.textContent = formatSeconds(remainingSeconds);
+                    updateProgressBar();
 
                     if (remainingSeconds <= 0) {
                         handleGameOver();
