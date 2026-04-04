@@ -32,6 +32,9 @@ require_once __DIR__ . '/exercise-menu.php';
 $mode = normalizeExerciseMode($mode);
 $chronoDelay = getChronoDelayForAction('right-click', $mode);
 $countdownSeconds = $chronoDelay !== null ? $items * $chronoDelay : null;
+$countdownDisplay = $countdownSeconds !== null
+    ? rtrim(rtrim(number_format($countdownSeconds, 1, '.', ''), '0'), '.')
+    : null;
 $previousExercise = getPreviousExerciseMenuItem(basename(__FILE__), 'right-click', $items);
 $previousHref = $previousExercise
     ? $previousExercise['file'] . '?' . http_build_query([
@@ -103,7 +106,7 @@ if ($isRightClickExercise): ?>
     </div>
     <?php if ($countdownSeconds !== null): ?>
     <div class="status-box completion-hideable">
-        Temps : <span id="countdown-value"><?= (int) $countdownSeconds ?></span>s
+        Temps : <span id="countdown-value"><?= htmlspecialchars((string) $countdownDisplay, ENT_QUOTES, 'UTF-8') ?></span>s
     </div>
     <?php endif; ?>
 
@@ -163,7 +166,7 @@ if ($isRightClickExercise): ?>
             let isGameOver = false;
             let isCompleted = false;
             let timerId = null;
-            let remainingSeconds = <?= $countdownSeconds !== null ? (int) $countdownSeconds : 'null' ?>;
+            let remainingSeconds = <?= $countdownSeconds !== null ? (float) $countdownSeconds : 'null' ?>;
 
             function enableNextStep() {
                 if (!nextStepButton) {
@@ -222,17 +225,24 @@ if ($isRightClickExercise): ?>
                 }
             }
 
+            function formatSeconds(value) {
+                const normalizedValue = Number.isFinite(value) ? Math.max(0, value) : 0;
+                return Number.isInteger(normalizedValue)
+                    ? String(normalizedValue)
+                    : normalizedValue.toFixed(1);
+            }
+
             if (typeof remainingSeconds === 'number' && countdownValue) {
                 timerId = window.setInterval(function () {
                     if (isCompleted || isGameOver) {
                         return;
                     }
-                    remainingSeconds--;
-                    countdownValue.textContent = String(Math.max(0, remainingSeconds));
+                    remainingSeconds = Math.max(0, Number((remainingSeconds - 0.1).toFixed(1)));
+                    countdownValue.textContent = formatSeconds(remainingSeconds);
                     if (remainingSeconds <= 0) {
                         handleGameOver();
                     }
-                }, 1000);
+                }, 100);
             }
 
             function positionMenuAtClick(menu, event) {
