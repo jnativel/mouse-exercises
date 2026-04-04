@@ -171,6 +171,29 @@ if ($isCopyPasteExercise): ?>
                 });
             }
 
+            function positionMenuAtClick(menu, event) {
+                menu.hidden = false;
+
+                const menuWidth = menu.offsetWidth;
+                const menuHeight = menu.offsetHeight;
+                const margin = 4;
+
+                const maxX = Math.max(margin, window.innerWidth - menuWidth - margin);
+                const maxY = Math.max(margin, window.innerHeight - menuHeight - margin);
+
+                const left = Math.max(margin, Math.min(event.clientX, maxX));
+                const top = Math.max(margin, Math.min(event.clientY, maxY));
+
+                menu.style.left = left + 'px';
+                menu.style.top = top + 'px';
+            }
+
+            document.addEventListener('contextmenu', function (event) {
+                if (exercise.contains(event.target)) {
+                    event.preventDefault();
+                }
+            }, true);
+
             function updatePasteMenus() {
                 exercise.querySelectorAll('[data-paste-command="paste"]').forEach(function (button) {
                     if (copiedId) {
@@ -187,11 +210,13 @@ if ($isCopyPasteExercise): ?>
                 const sourceButton = event.target.closest('[data-copy-source]');
                 const pasteArea = event.target.closest('[data-copy-destination] .copy-paste-target, [data-paste-slot]');
 
+                event.preventDefault();
+
                 if (!sourceButton && !pasteArea) {
+                    closeAllMenus();
                     return;
                 }
 
-                event.preventDefault();
                 closeAllMenus();
 
                 if (sourceButton) {
@@ -207,7 +232,7 @@ if ($isCopyPasteExercise): ?>
 
                     const menu = row.querySelector('[data-copy-menu]');
                     if (menu) {
-                        menu.hidden = false;
+                        positionMenuAtClick(menu, event);
                     }
 
                     if (copyNote) {
@@ -228,7 +253,7 @@ if ($isCopyPasteExercise): ?>
                 }
 
                 updatePasteMenus();
-                menu.hidden = false;
+                positionMenuAtClick(menu, event);
 
                 if (copyNote) {
                     copyNote.textContent = copiedId
@@ -369,4 +394,3 @@ if ($isCopyPasteExercise): ?>
 $mainContent = (string) ob_get_clean();
 
 require __DIR__ . '/template.php';
-
