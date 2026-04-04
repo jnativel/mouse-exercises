@@ -67,7 +67,7 @@ if ($isCopyPasteExercise) {
 ob_start();
 
 if ($isCopyPasteExercise): ?>
-    <div class="copy-paste-wrapper" id="copy-paste-exercise">
+    <div class="workflow-exercise" id="copy-paste-exercise">
         <?php if ($countdownSeconds !== null): ?>
             <div class="status-box completion-hideable">
                 Temps : <span id="countdown-value"><?= htmlspecialchars((string) $countdownDisplay, ENT_QUOTES, 'UTF-8') ?></span>s
@@ -82,11 +82,11 @@ if ($isCopyPasteExercise): ?>
         </div>
 
         <?php for ($i = 1; $i <= $items; $i++): ?>
-            <div class="copy-paste-row completion-hideable" data-row data-id="item-<?= $i ?>">
-                <div class="copy-paste-side copy-origin" data-copy-origin>
-                    <div class="copy-paste-label">Copiez-moi !</div>
+            <div class="workflow-row workflow-row--copy completion-hideable" data-row data-id="item-<?= $i ?>">
+                <div class="workflow-side copy-origin" data-copy-origin>
+                    <div class="action-label">Copiez-moi !</div>
 
-                    <div class="copy-paste-target">
+                    <div class="workflow-target">
                         <button
                             type="button"
                             class="smiley-btn"
@@ -105,26 +105,26 @@ if ($isCopyPasteExercise): ?>
                             </span>
                         </button>
 
-                        <div class="copy-menu" data-copy-menu hidden>
-                            <button type="button" class="copy-menu-item" disabled>Nouveau</button>
-                            <button type="button" class="copy-menu-item" disabled>Couper</button>
-                            <button type="button" class="copy-menu-item" data-copy-command="copy">Copier</button>
-                            <button type="button" class="copy-menu-item" disabled>Renommer</button>
-                            <button type="button" class="copy-menu-item is-separator-top" disabled>Supprimer</button>
+                        <div class="context-menu" data-context-menu hidden>
+                            <button type="button" class="context-menu-item" disabled>Nouveau</button>
+                            <button type="button" class="context-menu-item" disabled>Couper</button>
+                            <button type="button" class="context-menu-item" data-copy-command="copy">Copier</button>
+                            <button type="button" class="context-menu-item" disabled>Renommer</button>
+                            <button type="button" class="context-menu-item is-separator-top" disabled>Supprimer</button>
                         </div>
                     </div>
                 </div>
 
-                <div class="copy-paste-side copy-destination" data-copy-destination>
-                    <div class="copy-paste-label">Collez-moi !</div>
+                <div class="workflow-side copy-destination" data-copy-destination>
+                    <div class="action-label">Collez-moi !</div>
 
-                    <div class="copy-paste-target">
+                    <div class="workflow-target">
                         <div class="paste-slot" data-paste-slot></div>
 
-                        <div class="copy-menu" data-paste-menu hidden>
-                            <button type="button" class="copy-menu-item" disabled>Annuler</button>
-                            <button type="button" class="copy-menu-item is-disabled" data-paste-command="paste">Coller</button>
-                            <button type="button" class="copy-menu-item" disabled>Propriétés</button>
+                        <div class="context-menu" data-paste-menu hidden>
+                            <button type="button" class="context-menu-item" disabled>Annuler</button>
+                            <button type="button" class="context-menu-item is-disabled" data-paste-command="paste">Coller</button>
+                            <button type="button" class="context-menu-item" disabled>Propriétés</button>
                         </div>
                     </div>
                 </div>
@@ -228,7 +228,7 @@ if ($isCopyPasteExercise): ?>
             }
 
             function closeAllMenus() {
-                exercise.querySelectorAll('[data-copy-menu], [data-paste-menu]').forEach(function (menu) {
+                exercise.querySelectorAll('[data-context-menu], [data-paste-menu]').forEach(function (menu) {
                     menu.hidden = true;
                 });
             }
@@ -336,7 +336,7 @@ if ($isCopyPasteExercise): ?>
 
             exercise.addEventListener('contextmenu', function (event) {
                 const sourceButton = event.target.closest('[data-copy-source]');
-                const pasteArea = event.target.closest('[data-copy-destination] .copy-paste-target, [data-paste-slot]');
+                const pasteArea = event.target.closest('[data-copy-destination] .workflow-target, [data-paste-slot]');
 
                 event.preventDefault();
                 if (isGameOver || isCompleted) {
@@ -361,7 +361,7 @@ if ($isCopyPasteExercise): ?>
                         return;
                     }
 
-                    const menu = row.querySelector('[data-copy-menu]');
+                    const menu = row.querySelector('[data-context-menu]');
                     if (menu) {
                         positionMenuAtClick(menu, event);
                     }
@@ -406,7 +406,7 @@ if ($isCopyPasteExercise): ?>
 
                     const source = row.querySelector('[data-copy-source]');
                     const origin = row.querySelector('[data-copy-origin]');
-                    const menu = row.querySelector('[data-copy-menu]');
+                    const menu = row.querySelector('[data-context-menu]');
 
                     if (!source || !origin || origin.classList.contains('is-done')) {
                         return;
@@ -494,7 +494,7 @@ if ($isCopyPasteExercise): ?>
                     return;
                 }
 
-                if (!event.target.closest('.copy-menu') && !event.target.closest('[data-copy-source]') && !event.target.closest('[data-copy-destination]')) {
+                if (!event.target.closest('.context-menu') && !event.target.closest('[data-copy-source]') && !event.target.closest('[data-copy-destination]')) {
                     closeAllMenus();
                 }
             });

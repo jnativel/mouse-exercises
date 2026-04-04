@@ -85,7 +85,7 @@ if ($isRightClickExercise): ?>
     <div class="exercise-zone completion-hideable" id="exercise-zone">
         <?php for ($i = 1; $i <= $items; $i++): ?>
             <div class="smiley-item context-target" data-item>
-                <div class="smiley-helper">Supprimez-moi !</div>
+                <div class="action-label">Supprimez-moi !</div>
 
                 <button
                     type="button"
@@ -105,12 +105,12 @@ if ($isRightClickExercise): ?>
                     </span>
                 </button>
 
-                <div class="fake-context-menu" hidden>
-                    <button type="button" class="fake-context-item" disabled>Nouveau</button>
-                    <button type="button" class="fake-context-item" disabled>Couper</button>
-                    <button type="button" class="fake-context-item" disabled>Copier</button>
-                    <button type="button" class="fake-context-item" disabled>Renommer</button>
-                    <button type="button" class="fake-context-item is-delete" data-delete>Supprimer</button>
+                <div class="context-menu" hidden>
+                    <button type="button" class="context-menu-item" disabled>Nouveau</button>
+                    <button type="button" class="context-menu-item" disabled>Couper</button>
+                    <button type="button" class="context-menu-item" disabled>Copier</button>
+                    <button type="button" class="context-menu-item" disabled>Renommer</button>
+                    <button type="button" class="context-menu-item is-delete" data-delete>Supprimer</button>
                 </div>
             </div>
         <?php endfor; ?>
@@ -213,7 +213,7 @@ if ($isRightClickExercise): ?>
             }
 
             function closeAllMenus() {
-                zone.querySelectorAll('.fake-context-menu').forEach(function (menu) {
+                zone.querySelectorAll('.context-menu').forEach(function (menu) {
                     menu.hidden = true;
                 });
             }
@@ -310,7 +310,7 @@ if ($isRightClickExercise): ?>
                     return;
                 }
 
-                const menu = item.querySelector('.fake-context-menu');
+                const menu = item.querySelector('.context-menu');
                 if (!menu) {
                     return;
                 }
@@ -341,7 +341,7 @@ if ($isRightClickExercise): ?>
                     }
 
                     item.classList.add('is-done');
-                    const menu = item.querySelector('.fake-context-menu');
+                    const menu = item.querySelector('.context-menu');
                     if (menu) {
                         menu.hidden = true;
                     }
@@ -366,7 +366,7 @@ if ($isRightClickExercise): ?>
                     return;
                 }
 
-                const clickedMenu = event.target.closest('.fake-context-menu');
+                const clickedMenu = event.target.closest('.context-menu');
                 const clickedButton = event.target.closest('.smiley-btn');
 
                 if (!clickedMenu && !clickedButton) {

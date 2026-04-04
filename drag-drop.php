@@ -83,9 +83,9 @@ if ($isDragDropExercise): ?>
         </div>
 
         <?php for ($i = 1; $i <= $items; $i++): ?>
-            <div class="dragdrop-row completion-hideable" data-row>
-                <div class="dragdrop-side">
-                    <div class="dragdrop-label">Glissez-moi !</div>
+            <div class="workflow-row workflow-row--dragdrop completion-hideable" data-row>
+                <div class="workflow-side">
+                    <div class="action-label">Glissez-moi !</div>
 
                     <div class="drag-smiley-origin">
                         <button
@@ -109,8 +109,8 @@ if ($isDragDropExercise): ?>
                     </div>
                 </div>
 
-                <div class="dragdrop-side">
-                    <div class="dragdrop-label">Déposez-moi !</div>
+                <div class="workflow-side">
+                    <div class="action-label">Déposez-moi !</div>
 
                     <div class="drop-zone" data-drop-id="smiley-<?= $i ?>">
                         <div class="drop-zone-text">Déposez ici</div>
