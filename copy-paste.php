@@ -35,7 +35,7 @@ $countdownSeconds = $chronoDelay !== null ? $items * $chronoDelay : null;
 $countdownDisplay = $countdownSeconds !== null
     ? (string) max(0, (int) round($countdownSeconds))
     : null;
-$previousExercise = getPreviousExerciseMenuItem(basename(__FILE__), 'copy-paste', $items);
+$previousExercise = getPreviousExerciseMenuItem(basename(__FILE__), 'copy-paste', $items, $mode);
 $previousHref = $previousExercise
     ? $previousExercise['file'] . '?' . http_build_query([
         'action' => $previousExercise['action'],
@@ -44,7 +44,7 @@ $previousHref = $previousExercise
         'mode' => $mode,
     ])
     : null;
-$nextExercise = getNextExerciseMenuItem(basename(__FILE__), 'copy-paste', $items);
+$nextExercise = getNextExerciseMenuItem(basename(__FILE__), 'copy-paste', $items, $mode);
 $nextHref = $nextExercise
     ? $nextExercise['file'] . '?' . http_build_query([
         'action' => $nextExercise['action'],
@@ -67,6 +67,15 @@ ob_start();
 
 if ($isCopyPasteExercise): ?>
     <div class="copy-paste-wrapper" id="copy-paste-exercise">
+        <?php if ($countdownSeconds !== null): ?>
+            <div class="status-box completion-hideable">
+                Temps : <span id="countdown-value"><?= htmlspecialchars((string) $countdownDisplay, ENT_QUOTES, 'UTF-8') ?></span>s
+                <div class="countdown-progress" aria-hidden="true">
+                    <div class="countdown-progress-bar" id="countdown-progress"></div>
+                </div>
+            </div>
+        <?php endif; ?>
+
         <?php for ($i = 1; $i <= $items; $i++): ?>
             <div class="copy-paste-row completion-hideable" data-row data-id="item-<?= $i ?>">
                 <div class="copy-paste-side copy-origin" data-copy-origin>
@@ -154,14 +163,7 @@ if ($isCopyPasteExercise): ?>
             <?php endif; ?>
         </div>
 
-        <?php if ($countdownSeconds !== null): ?>
-        <div class="status-box completion-hideable">
-            Temps : <span id="countdown-value"><?= htmlspecialchars((string) $countdownDisplay, ENT_QUOTES, 'UTF-8') ?></span>s
-            <div class="countdown-progress" aria-hidden="true">
-                <div class="countdown-progress-bar" id="countdown-progress"></div>
-            </div>
-        </div>
-        <?php endif; ?>
+
     </div>
 
     <script>
