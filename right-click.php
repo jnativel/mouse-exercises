@@ -151,14 +151,38 @@ if ($isRightClickExercise): ?>
                 });
             }
 
+            function positionMenuAtClick(menu, event) {
+                menu.hidden = false;
+
+                const menuWidth = menu.offsetWidth;
+                const menuHeight = menu.offsetHeight;
+                const margin = 4;
+
+                const maxX = Math.max(margin, window.innerWidth - menuWidth - margin);
+                const maxY = Math.max(margin, window.innerHeight - menuHeight - margin);
+
+                const left = Math.max(margin, Math.min(event.clientX, maxX));
+                const top = Math.max(margin, Math.min(event.clientY, maxY));
+
+                menu.style.left = left + 'px';
+                menu.style.top = top + 'px';
+            }
+
+            document.addEventListener('contextmenu', function (event) {
+                if (zone.contains(event.target)) {
+                    event.preventDefault();
+                }
+            }, true);
+
             zone.addEventListener('contextmenu', function (event) {
+                event.preventDefault();
+
                 const button = event.target.closest('.smiley-btn');
 
                 if (!button) {
+                    closeAllMenus();
                     return;
                 }
-
-                event.preventDefault();
 
                 const item = button.closest('[data-item]');
                 if (!item || item.classList.contains('is-done')) {
@@ -172,7 +196,11 @@ if ($isRightClickExercise): ?>
 
                 const wasHidden = menu.hidden;
                 closeAllMenus();
-                menu.hidden = !wasHidden ? true : false;
+                if (!wasHidden) {
+                    menu.hidden = true;
+                } else {
+                    positionMenuAtClick(menu, event);
+                }
 
                 if (menuNote) {
                     menuNote.textContent = 'Cliquez maintenant sur “Supprimer”.';
@@ -244,4 +272,3 @@ if ($isRightClickExercise): ?>
 $mainContent = (string) ob_get_clean();
 
 require __DIR__ . '/template.php';
-
