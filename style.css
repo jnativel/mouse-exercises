@@ -120,6 +120,25 @@ body {
     font-weight: bold;
     line-height: 1.5;
     margin: 0;
+    transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.instruction.is-success-feedback {
+    color: #2e7d32;
+    transform: scale(1.01);
+    animation: instruction-success-pop 420ms ease-out both;
+}
+
+@keyframes instruction-success-pop {
+    from {
+        opacity: 0.25;
+        transform: translateY(6px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1.01);
+    }
 }
 
 .exercise-zone {
@@ -326,6 +345,14 @@ body {
     }
 
     .exercise-complete .success-message {
+        animation: none;
+    }
+
+    .instruction {
+        transition: none;
+    }
+
+    .instruction.is-success-feedback {
         animation: none;
     }
 }

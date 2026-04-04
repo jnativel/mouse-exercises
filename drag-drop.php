@@ -103,10 +103,6 @@ if ($isDragDropExercise): ?>
             Astuce : cliquez, gardez appuyé, déplacez, puis relâchez.
         </div>
 
-        <div class="success-message" id="success-message">
-            Bravo ! Tous les smileys ont été déplacés.
-        </div>
-
         <div class="controls">
             <?php if ($previousHref !== null): ?>
                 <a
@@ -144,9 +140,9 @@ if ($isDragDropExercise): ?>
 
             const exercise = document.getElementById('dragdrop-exercise');
             const remainingCount = document.getElementById('remaining-count');
-            const successMessage = document.getElementById('success-message');
             const dragNote = document.getElementById('drag-note');
             const nextStepButton = document.getElementById('next-step-button');
+            const instruction = document.querySelector('.instruction');
 
             if (!exercise) {
                 return;
@@ -166,8 +162,11 @@ if ($isDragDropExercise): ?>
             }
 
             function completeExercise() {
-                exercise.classList.add('exercise-complete');
                 enableNextStep();
+                if (instruction) {
+                    instruction.textContent = 'Bravo ! Tous les smileys ont été déplacés.';
+                    instruction.classList.add('is-success-feedback');
+                }
             }
 
             exercise.querySelectorAll('.drag-smiley').forEach(function (dragItem) {
@@ -243,10 +242,10 @@ if ($isDragDropExercise): ?>
                         dragNote.textContent = 'Très bien. Recommencez avec le smiley suivant.';
                     }
 
-                    if (remaining <= 0 && successMessage) {
+                    if (remaining <= 0) {
                         completeExercise();
                         if (dragNote) {
-                            dragNote.textContent = 'Exercice terminé.';
+                            dragNote.textContent = 'Exercice terminé. Vous pouvez passer à l’étape suivante.';
                         }
                     }
                 });

@@ -88,10 +88,6 @@ if ($isLeftClickExercise): ?>
         Restants : <span id="remaining-count"><?= (int) $items ?></span> / <?= (int) $items ?>
     </div>
 
-    <div class="success-message" id="success-message">
-        Bravo ! Tous les smileys ont été supprimés.
-    </div>
-
     <div class="controls">
         <?php if ($previousHref !== null): ?>
             <a
@@ -130,8 +126,8 @@ if ($isLeftClickExercise): ?>
             const exercise = document.getElementById('click-left-exercise');
             const zone = document.getElementById('exercise-zone');
             const remainingCount = document.getElementById('remaining-count');
-            const successMessage = document.getElementById('success-message');
             const nextStepButton = document.getElementById('next-step-button');
+            const instruction = document.querySelector('.instruction');
 
             if (!zone || !exercise) {
                 return;
@@ -150,8 +146,11 @@ if ($isLeftClickExercise): ?>
             }
 
             function completeExercise() {
-                exercise.classList.add('exercise-complete');
                 enableNextStep();
+                if (instruction) {
+                    instruction.textContent = 'Bravo ! Tous les smileys ont été supprimés.';
+                    instruction.classList.add('is-success-feedback');
+                }
             }
 
             zone.addEventListener('click', function (event) {
@@ -177,7 +176,7 @@ if ($isLeftClickExercise): ?>
                     remainingCount.textContent = String(remaining);
                 }
 
-                if (remaining <= 0 && successMessage) {
+                if (remaining <= 0) {
                     completeExercise();
                 }
             });
