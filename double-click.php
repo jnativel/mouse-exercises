@@ -110,8 +110,11 @@ if ($isDoubleClickExercise): ?>
 
         <?php if ($nextHref !== null): ?>
             <a
-                class="btn btn-green"
+                class="btn btn-green is-disabled"
+                id="next-step-button"
                 href="<?= htmlspecialchars($nextHref, ENT_QUOTES, 'UTF-8') ?>"
+                aria-disabled="true"
+                tabindex="-1"
             >
                 Étape suivante
             </a>
@@ -125,12 +128,23 @@ if ($isDoubleClickExercise): ?>
             const zone = document.getElementById('exercise-zone');
             const remainingCount = document.getElementById('remaining-count');
             const successMessage = document.getElementById('success-message');
+            const nextStepButton = document.getElementById('next-step-button');
 
             if (!zone) {
                 return;
             }
 
             let remaining = zone.querySelectorAll('[data-item]').length;
+
+            function enableNextStep() {
+                if (!nextStepButton) {
+                    return;
+                }
+
+                nextStepButton.classList.remove('is-disabled');
+                nextStepButton.removeAttribute('aria-disabled');
+                nextStepButton.removeAttribute('tabindex');
+            }
 
             zone.addEventListener('dblclick', function (event) {
                 const button = event.target.closest('.smiley-btn');
@@ -157,6 +171,7 @@ if ($isDoubleClickExercise): ?>
 
                 if (remaining <= 0 && successMessage) {
                     successMessage.style.display = 'block';
+                    enableNextStep();
                 }
             });
 
@@ -180,4 +195,3 @@ if ($isDoubleClickExercise): ?>
 $mainContent = (string) ob_get_clean();
 
 require __DIR__ . '/template.php';
-

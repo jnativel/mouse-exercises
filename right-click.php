@@ -122,8 +122,11 @@ if ($isRightClickExercise): ?>
 
         <?php if ($nextHref !== null): ?>
             <a
-                class="btn btn-green"
+                class="btn btn-green is-disabled"
+                id="next-step-button"
                 href="<?= htmlspecialchars($nextHref, ENT_QUOTES, 'UTF-8') ?>"
+                aria-disabled="true"
+                tabindex="-1"
             >
                 Étape suivante
             </a>
@@ -138,12 +141,23 @@ if ($isRightClickExercise): ?>
             const remainingCount = document.getElementById('remaining-count');
             const successMessage = document.getElementById('success-message');
             const menuNote = document.getElementById('menu-note');
+            const nextStepButton = document.getElementById('next-step-button');
 
             if (!zone) {
                 return;
             }
 
             let remaining = zone.querySelectorAll('[data-item]').length;
+
+            function enableNextStep() {
+                if (!nextStepButton) {
+                    return;
+                }
+
+                nextStepButton.classList.remove('is-disabled');
+                nextStepButton.removeAttribute('aria-disabled');
+                nextStepButton.removeAttribute('tabindex');
+            }
 
             function closeAllMenus() {
                 zone.querySelectorAll('.fake-context-menu').forEach(function (menu) {
@@ -237,6 +251,7 @@ if ($isRightClickExercise): ?>
                         if (menuNote) {
                             menuNote.textContent = 'Exercice terminé.';
                         }
+                        enableNextStep();
                     }
 
                     return;
