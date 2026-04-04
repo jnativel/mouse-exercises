@@ -194,6 +194,29 @@ body {
     animation: instruction-success-pop 420ms ease-out both;
 }
 
+
+.instruction.is-timeout-feedback {
+    color: #c62828;
+    background: #ffe5e5;
+    border: 2px solid #c62828;
+    border-radius: 10px;
+    padding: 10px 14px;
+    animation: instruction-timeout-pulse 950ms ease-in-out infinite;
+}
+
+@keyframes instruction-timeout-pulse {
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.75;
+        transform: scale(1.02);
+    }
+}
+
 @keyframes instruction-success-pop {
     from {
         opacity: 0.25;
@@ -382,6 +405,10 @@ body {
     transition: width 0.12s linear;
 }
 
+.remaining-box {
+    display: none;
+}
+
 .completion-hideable {
     transition: opacity 0.25s ease;
 }
@@ -434,7 +461,8 @@ body {
         transition: none;
     }
 
-    .instruction.is-success-feedback {
+    .instruction.is-success-feedback,
+    .instruction.is-timeout-feedback {
         animation: none;
     }
 }

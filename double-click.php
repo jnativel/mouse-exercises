@@ -103,7 +103,7 @@ if ($isDoubleClickExercise): ?>
         <?php endfor; ?>
     </div>
 
-    <div class="status-box completion-hideable">
+    <div class="status-box completion-hideable remaining-box" aria-hidden="true">
         Restants : <span id="remaining-count"><?= (int) $items ?></span> / <?= (int) $items ?>
     </div>
     <div class="controls">
@@ -184,6 +184,7 @@ if ($isDoubleClickExercise): ?>
                 enableNextStep();
                 if (instruction) {
                     instruction.textContent = 'Bravo ! Tous les smileys ont été double-cliqués.';
+                    instruction.classList.remove('is-timeout-feedback');
                     instruction.classList.add('is-success-feedback');
                 }
             }
@@ -207,6 +208,7 @@ if ($isDoubleClickExercise): ?>
                 if (instruction) {
                     instruction.textContent = 'Temps écoulé. Vous pouvez uniquement recommencer.';
                     instruction.classList.remove('is-success-feedback');
+                    instruction.classList.add('is-timeout-feedback');
                 }
             }
 
