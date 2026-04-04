@@ -55,7 +55,7 @@ $nextHref = $nextExercise
     : null;
 
 $pageTitle = 'Exercices souris';
-$exerciseTitle = 'Copier / coller (x ' . $items . ') — Mode ' . getExerciseModeLabel($mode);
+$exerciseTitle = 'Copier / coller';
 
 if ($isCopyPasteExercise) {
     $exerciseInstruction = 'Majeur sur le bouton droit de la souris, allez sur la cible, clic droit et descendez sur “Copier”. Puis cliquez sur “Collez-moi !”, faites un clic droit et choisissez “Coller”.';

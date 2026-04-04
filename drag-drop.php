@@ -55,7 +55,7 @@ $nextHref = $nextExercise
     : null;
 
 $pageTitle = 'Exercices souris';
-$exerciseTitle = 'Glisser / déposer (x ' . $items . ') — Mode ' . getExerciseModeLabel($mode);
+$exerciseTitle = 'Glisser / déposer';
 
 if ($isDragDropExercise) {
     $exerciseInstruction = 'Index sur le bouton gauche de la souris, cliquez sur le smiley, gardez le clic appuyé, glissez vers la droite, puis relâchez dans la zone.';

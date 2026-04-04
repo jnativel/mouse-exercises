@@ -55,7 +55,7 @@ $nextHref = $nextExercise
     : null;
 
 $pageTitle = 'Exercices souris';
-$exerciseTitle = 'Clic gauche (x ' . $items . ') — Mode ' . getExerciseModeLabel($mode);
+$exerciseTitle = 'Clic gauche';
 
 if ($isLeftClickExercise) {
     $exerciseInstruction = 'Placez l’index sur le bouton gauche de la souris, puis cliquez sur chaque smiley pour le faire disparaître.';

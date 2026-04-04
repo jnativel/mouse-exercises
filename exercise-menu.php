@@ -27,12 +27,12 @@ function getExerciseMenuItems(): array
 function getExerciseMenuChronoItems(): array
 {
     return [
-        ['label' => 'Clic gauche', 'file' => 'click-left.php', 'action' => 'click-left', 'size' => 100, 'stages' => [4], 'delay' => [1, 1.4, 1.8]],
-        ['label' => 'Double clic', 'file' => 'double-click.php', 'action' => 'double-click', 'size' => 100, 'stages' => [12], 'delay' => [2, 3, 4]],
-        ['label' => 'Clic droit', 'file' => 'right-click.php', 'action' => 'right-click', 'size' => 100, 'stages' => [12], 'delay' => [2, 3, 4]],
-        ['label' => 'Glisser déposer', 'file' => 'drag-drop.php', 'action' => 'drag-drop', 'size' => 100, 'stages' => [4], 'delay' => [2, 3, 4]],
-        ['label' => 'Copier coller', 'file' => 'copy-paste.php', 'action' => 'copy-paste', 'size' => 100, 'stages' => [4], 'delay' => [2, 3, 4]],
-        ['label' => 'Couper coller', 'file' => 'cut-paste.php', 'action' => 'cut-paste', 'size' => 100, 'stages' => [4], 'delay' => [2, 3, 4]],
+        ['label' => 'Clic gauche', 'file' => 'click-left.php', 'action' => 'click-left', 'size' => 100, 'stages' => [4], 'delay' => [0.7, 1.4, 2.8]],
+        ['label' => 'Double clic', 'file' => 'double-click.php', 'action' => 'double-click', 'size' => 100, 'stages' => [4], 'delay' => [0.8, 1.6, 3.2]],
+        ['label' => 'Clic droit', 'file' => 'right-click.php', 'action' => 'right-click', 'size' => 100, 'stages' => [4], 'delay' => [1.5, 3, 6]],
+        ['label' => 'Glisser déposer', 'file' => 'drag-drop.php', 'action' => 'drag-drop', 'size' => 100, 'stages' => [2], 'delay' => [1.5, 3, 6]],
+        ['label' => 'Copier coller', 'file' => 'copy-paste.php', 'action' => 'copy-paste', 'size' => 100, 'stages' => [2], 'delay' => [3, 6, 12]],
+        ['label' => 'Couper coller', 'file' => 'cut-paste.php', 'action' => 'cut-paste', 'size' => 100, 'stages' => [2], 'delay' => [2.8, 5.6, 11.2]],
     ];
 }
 

@@ -55,7 +55,7 @@ $nextHref = $nextExercise
     : null;
 
 $pageTitle = 'Exercices souris';
-$exerciseTitle = 'Clic droit (x ' . $items . ') — Mode ' . getExerciseModeLabel($mode);
+$exerciseTitle = 'Clic droit';
 
 if ($isRightClickExercise) {
     $exerciseInstruction = 'Faites un clic droit sur un smiley. Un menu va apparaître. Cliquez ensuite sur “Supprimer”.';

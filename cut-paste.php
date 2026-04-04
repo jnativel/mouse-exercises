@@ -55,7 +55,7 @@ $nextHref = $nextExercise
     : null;
 
 $pageTitle = 'Exercices souris';
-$exerciseTitle = 'Couper / coller (x ' . $items . ') — Mode ' . getExerciseModeLabel($mode);
+$exerciseTitle = 'Couper / coller';
 
 if ($isCutPasteExercise) {
     $exerciseInstruction = 'Clic droit sur le smiley, choisissez “Couper”. Puis faites un clic droit sur “Collez-moi !” et choisissez “Coller”.';

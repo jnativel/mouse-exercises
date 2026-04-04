@@ -55,7 +55,7 @@ $nextHref = $nextExercise
     : null;
 
 $pageTitle = 'Exercices souris';
-$exerciseTitle = 'Double clic (x ' . $items . ') — Mode ' . getExerciseModeLabel($mode);
+$exerciseTitle = 'Double clic';
 
 if ($isDoubleClickExercise) {
     $exerciseInstruction = 'Placez l’index sur le bouton gauche de la souris, puis faites un double clic sur chaque smiley pour le faire disparaître.';
