@@ -532,6 +532,10 @@ body {
     pointer-events: none;
 }
 
+.copy-origin .smiley-btn.is-cut {
+    opacity: 0.6;
+}
+
 .paste-slot {
     width: 100%;
     min-height: 120px;
