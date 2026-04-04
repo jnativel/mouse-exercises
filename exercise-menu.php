@@ -117,11 +117,15 @@ function getExerciseModeLabel(string $mode): string
  *
  * @return array<int, array{label: string, file: string, action: string, items: int, size: int}>
  */
-function getExerciseStepSequence(): array
+function getExerciseStepSequence(?string $mode = null): array
 {
     $steps = [];
+    $mode = normalizeExerciseMode($mode);
+    $sourceItems = $mode === 'classic'
+        ? getExerciseMenuItems()
+        : getExerciseMenuChronoItems();
 
-    foreach (getExerciseMenuItems() as $item) {
+    foreach ($sourceItems as $item) {
         foreach ($item['stages'] as $stageItems) {
             $steps[] = [
                 'label' => $item['label'],
@@ -241,9 +245,9 @@ function renderExerciseMenu(
 /**
  * Retourne l'index de l'étape courante dans la séquence pédagogique.
  */
-function getCurrentExerciseMenuIndex(string $currentScript, string $currentAction, int $currentItems): ?int
+function getCurrentExerciseMenuIndex(string $currentScript, string $currentAction, int $currentItems, ?string $mode = null): ?int
 {
-    $menuItems = getExerciseStepSequence();
+    $menuItems = getExerciseStepSequence($mode);
     $normalizedCurrentAction = strtolower(trim($currentAction));
 
     foreach ($menuItems as $index => $item) {
@@ -264,10 +268,10 @@ function getCurrentExerciseMenuIndex(string $currentScript, string $currentActio
  *
  * @return array{label: string, file: string, action: string, items: int, size: int}|null
  */
-function getPreviousExerciseMenuItem(string $currentScript, string $currentAction, int $currentItems): ?array
+function getPreviousExerciseMenuItem(string $currentScript, string $currentAction, int $currentItems, ?string $mode = null): ?array
 {
-    $menuItems = getExerciseStepSequence();
-    $currentIndex = getCurrentExerciseMenuIndex($currentScript, $currentAction, $currentItems);
+    $menuItems = getExerciseStepSequence($mode);
+    $currentIndex = getCurrentExerciseMenuIndex($currentScript, $currentAction, $currentItems, $mode);
 
     if ($currentIndex === null || $currentIndex <= 0) {
         return null;
@@ -281,10 +285,10 @@ function getPreviousExerciseMenuItem(string $currentScript, string $currentActio
  *
  * @return array{label: string, file: string, action: string, items: int, size: int}|null
  */
-function getNextExerciseMenuItem(string $currentScript, string $currentAction, int $currentItems): ?array
+function getNextExerciseMenuItem(string $currentScript, string $currentAction, int $currentItems, ?string $mode = null): ?array
 {
-    $menuItems = getExerciseStepSequence();
-    $currentIndex = getCurrentExerciseMenuIndex($currentScript, $currentAction, $currentItems);
+    $menuItems = getExerciseStepSequence($mode);
+    $currentIndex = getCurrentExerciseMenuIndex($currentScript, $currentAction, $currentItems, $mode);
 
     if ($currentIndex === null) {
         return null;
