@@ -160,12 +160,39 @@ function renderExerciseMenu(
     ];
 
     foreach ($modeLabels as $modeKey => $modeLabel) {
-        $modeHref = $currentScript . '?' . http_build_query([
-            'action' => $currentAction ?? '',
-            'items' => $currentItems ?? '',
-            'size' => 100,
-            'mode' => $modeKey,
-        ]);
+        $modeItems = $modeKey === 'classic'
+            ? getExerciseMenuItems()
+            : getExerciseMenuChronoItems();
+
+        $targetItem = null;
+        foreach ($modeItems as $modeItem) {
+            $matchesCurrentScript = strtolower($modeItem['file']) === strtolower($currentScript);
+            $matchesCurrentAction = $normalizedCurrentAction !== null
+                && strtolower($modeItem['action']) === $normalizedCurrentAction;
+
+            if ($matchesCurrentScript || $matchesCurrentAction) {
+                $targetItem = $modeItem;
+                break;
+            }
+        }
+
+        if ($targetItem === null) {
+            $targetItem = $modeItems[0] ?? null;
+        }
+
+        if ($targetItem !== null) {
+            $modeHref = $targetItem['file'] . '?' . http_build_query([
+                'action' => $targetItem['action'],
+                'items' => (int) ($targetItem['stages'][0] ?? 1),
+                'size' => $targetItem['size'],
+                'mode' => $modeKey,
+            ]);
+        } else {
+            $modeHref = $currentScript . '?' . http_build_query([
+                'mode' => $modeKey,
+            ]);
+        }
+
         $isModeActive = $currentMode === $modeKey;
         $html .= '<a class="exercise-mode-link' . ($isModeActive ? ' is-active' : '') . '" href="' . htmlspecialchars($modeHref, ENT_QUOTES, 'UTF-8') . '">';
         $html .= htmlspecialchars($modeLabel, ENT_QUOTES, 'UTF-8');
