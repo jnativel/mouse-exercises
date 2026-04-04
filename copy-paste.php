@@ -116,10 +116,6 @@ if ($isCopyPasteExercise): ?>
             Astuce : clic droit sur le smiley, choisissez “Copier”, puis clic droit sur “Collez-moi !” et choisissez “Coller”.
         </div>
 
-        <div class="success-message" id="success-message">
-            Bravo ! Tous les smileys ont été copiés puis collés.
-        </div>
-
         <div class="controls">
             <?php if ($previousHref !== null): ?>
                 <a
@@ -157,9 +153,9 @@ if ($isCopyPasteExercise): ?>
 
             const exercise = document.getElementById('copy-paste-exercise');
             const remainingCount = document.getElementById('remaining-count');
-            const successMessage = document.getElementById('success-message');
             const copyNote = document.getElementById('copy-note');
             const nextStepButton = document.getElementById('next-step-button');
+            const instruction = document.querySelector('.instruction');
 
             if (!exercise) {
                 return;
@@ -179,8 +175,11 @@ if ($isCopyPasteExercise): ?>
             }
 
             function completeExercise() {
-                exercise.classList.add('exercise-complete');
                 enableNextStep();
+                if (instruction) {
+                    instruction.textContent = 'Bravo ! Tous les smileys ont été copiés puis collés.';
+                    instruction.classList.add('is-success-feedback');
+                }
             }
 
             function closeAllMenus() {
@@ -383,10 +382,10 @@ if ($isCopyPasteExercise): ?>
                         copyNote.textContent = 'Très bien. Passez à la ligne suivante.';
                     }
 
-                    if (remaining <= 0 && successMessage) {
+                    if (remaining <= 0) {
                         completeExercise();
                         if (copyNote) {
-                            copyNote.textContent = 'Exercice terminé.';
+                            copyNote.textContent = 'Exercice terminé. Vous pouvez passer à l’étape suivante.';
                         }
                     }
 
