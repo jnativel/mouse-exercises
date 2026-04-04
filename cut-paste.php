@@ -126,7 +126,7 @@ if ($isCutPasteExercise): ?>
             </div>
         <?php endfor; ?>
 
-        <div class="status-box completion-hideable">
+        <div class="status-box completion-hideable remaining-box" aria-hidden="true">
             Restants : <span id="remaining-count"><?= (int) $items ?></span> / <?= (int) $items ?>
         </div>
         <div class="menu-note completion-hideable" id="copy-note">
@@ -212,6 +212,7 @@ if ($isCutPasteExercise): ?>
                 enableNextStep();
                 if (instruction) {
                     instruction.textContent = 'Bravo ! Tous les smileys ont été coupés puis collés.';
+                    instruction.classList.remove('is-timeout-feedback');
                     instruction.classList.add('is-success-feedback');
                 }
             }
@@ -242,6 +243,7 @@ if ($isCutPasteExercise): ?>
                 if (instruction) {
                     instruction.textContent = 'Temps écoulé. Vous pouvez uniquement recommencer.';
                     instruction.classList.remove('is-success-feedback');
+                    instruction.classList.add('is-timeout-feedback');
                 }
                 if (copyNote) {
                     copyNote.textContent = 'Temps écoulé.';

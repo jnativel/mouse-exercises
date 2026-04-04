@@ -111,7 +111,7 @@ if ($isRightClickExercise): ?>
         <?php endfor; ?>
     </div>
 
-    <div class="status-box completion-hideable">
+    <div class="status-box completion-hideable remaining-box" aria-hidden="true">
         Restants : <span id="remaining-count"><?= (int) $items ?></span> / <?= (int) $items ?>
     </div>
     <div class="menu-note completion-hideable" id="menu-note">
@@ -197,6 +197,7 @@ if ($isRightClickExercise): ?>
                 enableNextStep();
                 if (instruction) {
                     instruction.textContent = 'Bravo ! Tous les smileys ont été supprimés.';
+                    instruction.classList.remove('is-timeout-feedback');
                     instruction.classList.add('is-success-feedback');
                 }
             }
@@ -227,6 +228,7 @@ if ($isRightClickExercise): ?>
                 if (instruction) {
                     instruction.textContent = 'Temps écoulé. Vous pouvez uniquement recommencer.';
                     instruction.classList.remove('is-success-feedback');
+                    instruction.classList.add('is-timeout-feedback');
                 }
                 if (menuNote) {
                     menuNote.textContent = 'Temps écoulé.';
