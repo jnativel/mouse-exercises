@@ -125,11 +125,9 @@ if ($isDoubleClickExercise): ?>
 
         <?php if ($nextHref !== null): ?>
             <a
-                class="btn btn-green is-disabled"
+                class="btn btn-green is-hidden"
                 id="next-step-button"
                 href="<?= htmlspecialchars($nextHref, ENT_QUOTES, 'UTF-8') ?>"
-                aria-disabled="true"
-                tabindex="-1"
             >
                 Étape suivante
             </a>
@@ -168,9 +166,7 @@ if ($isDoubleClickExercise): ?>
                     return;
                 }
 
-                nextStepButton.classList.remove('is-disabled');
-                nextStepButton.removeAttribute('aria-disabled');
-                nextStepButton.removeAttribute('tabindex');
+                nextStepButton.classList.remove('is-hidden');
             }
 
             function completeExercise() {
@@ -201,9 +197,8 @@ if ($isDoubleClickExercise): ?>
                     if (button === restartButton) {
                         return;
                     }
-                    button.classList.add('is-disabled');
-                    button.setAttribute('aria-disabled', 'true');
-                    button.setAttribute('tabindex', '-1');
+                    button.classList.add('is-hidden');
+                    button.setAttribute('aria-hidden', 'true');
                 });
                 if (instruction) {
                     instruction.textContent = 'Temps écoulé. Vous pouvez recommencer.';
