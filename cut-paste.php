@@ -120,15 +120,6 @@ if ($isCutPasteExercise): ?>
         <div class="status-box completion-hideable">
             Restants : <span id="remaining-count"><?= (int) $items ?></span> / <?= (int) $items ?>
         </div>
-        <?php if ($countdownSeconds !== null): ?>
-        <div class="status-box completion-hideable">
-            Temps : <span id="countdown-value"><?= htmlspecialchars((string) $countdownDisplay, ENT_QUOTES, 'UTF-8') ?></span>s
-            <div class="countdown-progress" aria-hidden="true">
-                <div class="countdown-progress-bar" id="countdown-progress"></div>
-            </div>
-        </div>
-        <?php endif; ?>
-
         <div class="menu-note completion-hideable" id="copy-note">
             Astuce : clic droit sur le smiley, choisissez “Couper”, puis clic droit sur “Collez-moi !” et choisissez “Coller”.
         </div>
@@ -162,6 +153,15 @@ if ($isCutPasteExercise): ?>
                 </a>
             <?php endif; ?>
         </div>
+
+        <?php if ($countdownSeconds !== null): ?>
+        <div class="status-box completion-hideable">
+            Temps : <span id="countdown-value"><?= htmlspecialchars((string) $countdownDisplay, ENT_QUOTES, 'UTF-8') ?></span>s
+            <div class="countdown-progress" aria-hidden="true">
+                <div class="countdown-progress-bar" id="countdown-progress"></div>
+            </div>
+        </div>
+        <?php endif; ?>
     </div>
 
     <script>

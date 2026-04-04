@@ -177,6 +177,11 @@ function renderExerciseMenu(
     }
 
     $html .= '</ul>';
+    $html .= '<details class="exercise-mode-toggle">';
+    $html .= '<summary aria-label="Afficher ou masquer les modes">';
+    $html .= '<span class="exercise-mode-toggle-label-plus">Plus</span>';
+    $html .= '<span class="exercise-mode-toggle-label-minus">Moins</span>';
+    $html .= '</summary>';
     $html .= '<div class="exercise-mode-list" aria-label="Choisir un mode">';
 
     $modeLabels = [
@@ -227,6 +232,7 @@ function renderExerciseMenu(
     }
 
     $html .= '</div>';
+    $html .= '</details>';
     $html .= '</nav>';
 
     return $html;
