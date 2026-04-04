@@ -27,7 +27,7 @@ function getExerciseMenuItems(): array
 function getExerciseMenuChronoItems(): array
 {
     return [
-        ['label' => 'Clic gauche', 'file' => 'click-left.php', 'action' => 'click-left', 'size' => 100, 'stages' => [24], 'delay' => [2, 3, 4]],
+        ['label' => 'Clic gauche', 'file' => 'click-left.php', 'action' => 'click-left', 'size' => 100, 'stages' => [24], 'delay' => [1, 2, 3]],
         ['label' => 'Double clic', 'file' => 'double-click.php', 'action' => 'double-click', 'size' => 100, 'stages' => [24], 'delay' => [2, 3, 4]],
         ['label' => 'Clic droit', 'file' => 'right-click.php', 'action' => 'right-click', 'size' => 100, 'stages' => [12], 'delay' => [2, 3, 4]],
         ['label' => 'Glisser déposer', 'file' => 'drag-drop.php', 'action' => 'drag-drop', 'size' => 100, 'stages' => [8], 'delay' => [2, 3, 4]],
