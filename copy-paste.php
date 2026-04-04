@@ -194,9 +194,24 @@ if ($isCopyPasteExercise): ?>
                 }
             }, true);
 
+            function canPasteInRow(row) {
+                if (!row || !copiedId) {
+                    return false;
+                }
+
+                const expectedId = row.getAttribute('data-id');
+                if (!expectedId || expectedId !== copiedId) {
+                    return false;
+                }
+
+                const origin = row.querySelector('[data-copy-origin]');
+                return !origin || !origin.classList.contains('is-done');
+            }
+
             function updatePasteMenus() {
                 exercise.querySelectorAll('[data-paste-command="paste"]').forEach(function (button) {
-                    if (copiedId) {
+                    const row = button.closest('[data-row]');
+                    if (canPasteInRow(row)) {
                         button.classList.remove('is-disabled');
                         button.disabled = false;
                     } else {
@@ -279,10 +294,6 @@ if ($isCopyPasteExercise): ?>
                     }
 
                     copiedId = source.getAttribute('data-copy-source');
-                    exercise.querySelectorAll('[data-copy-origin]').forEach(function (item) {
-                        item.classList.remove('is-copied');
-                    });
-                    origin.classList.add('is-copied');
 
                     if (menu) {
                         menu.hidden = true;
@@ -336,7 +347,6 @@ if ($isCopyPasteExercise): ?>
                     slot.appendChild(clone);
                     slot.classList.add('is-filled');
 
-                    origin.classList.remove('is-copied');
                     origin.classList.add('is-done');
 
                     if (pasteMenu) {
