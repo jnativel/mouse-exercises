@@ -21,6 +21,8 @@ $currentScript = basename((string) ($_SERVER['PHP_SELF'] ?? ''));
 $currentAction = isset($action) ? (string) $action : null;
 $currentItems = isset($items) ? (int) $items : null;
 $currentMode = isset($mode) ? (string) $mode : null;
+$currentMode = normalizeExerciseMode($currentMode);
+$isChronoMode = $currentMode !== 'classic';
 $exerciseMenu = renderExerciseMenu($currentScript, $currentAction, $currentItems, $currentMode);
 ?>
 <!DOCTYPE html>
@@ -31,7 +33,7 @@ $exerciseMenu = renderExerciseMenu($currentScript, $currentAction, $currentItems
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="<?= $isChronoMode ? 'mode-chrono' : 'mode-classic' ?>">
 
 <header class="site-header">
     <?= htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8') ?>
