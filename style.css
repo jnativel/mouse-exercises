@@ -612,7 +612,7 @@ body.mode-chrono .copy-paste-label {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 40px;
-    align-items: start;
+    align-items: stretch;
     margin-bottom: 28px;
 }
 
@@ -620,6 +620,7 @@ body.mode-chrono .copy-paste-label {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 12px;
     min-height: 220px;
 }
@@ -707,13 +708,14 @@ body.mode-chrono .copy-paste-label {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 56px;
-    align-items: start;
+    align-items: stretch;
 }
 
 .copy-paste-side {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 12px;
     position: relative;
     min-height: 170px;
