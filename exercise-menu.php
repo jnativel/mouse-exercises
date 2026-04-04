@@ -63,15 +63,12 @@ function renderExerciseMenu(
 }
 
 /**
- * Retourne le prochain exercice défini dans le menu.
- *
- * @return array{label: string, file: string, action: string, items: int, size: int}|null
+ * Retourne l'index de l'exercice courant dans le menu.
  */
-function getNextExerciseMenuItem(string $currentScript, string $currentAction, int $currentItems): ?array
+function getCurrentExerciseMenuIndex(string $currentScript, string $currentAction, int $currentItems): ?int
 {
     $menuItems = getExerciseMenuItems();
     $normalizedCurrentAction = strtolower(trim($currentAction));
-    $currentIndex = null;
 
     foreach ($menuItems as $index => $item) {
         if (
@@ -79,10 +76,39 @@ function getNextExerciseMenuItem(string $currentScript, string $currentAction, i
             && $normalizedCurrentAction === strtolower($item['action'])
             && $currentItems === $item['items']
         ) {
-            $currentIndex = $index;
-            break;
+            return $index;
         }
     }
+
+    return null;
+}
+
+/**
+ * Retourne l'exercice précédent défini dans le menu.
+ *
+ * @return array{label: string, file: string, action: string, items: int, size: int}|null
+ */
+function getPreviousExerciseMenuItem(string $currentScript, string $currentAction, int $currentItems): ?array
+{
+    $menuItems = getExerciseMenuItems();
+    $currentIndex = getCurrentExerciseMenuIndex($currentScript, $currentAction, $currentItems);
+
+    if ($currentIndex === null || $currentIndex <= 0) {
+        return null;
+    }
+
+    return $menuItems[$currentIndex - 1];
+}
+
+/**
+ * Retourne le prochain exercice défini dans le menu.
+ *
+ * @return array{label: string, file: string, action: string, items: int, size: int}|null
+ */
+function getNextExerciseMenuItem(string $currentScript, string $currentAction, int $currentItems): ?array
+{
+    $menuItems = getExerciseMenuItems();
+    $currentIndex = getCurrentExerciseMenuIndex($currentScript, $currentAction, $currentItems);
 
     if ($currentIndex === null) {
         return null;
@@ -90,7 +116,7 @@ function getNextExerciseMenuItem(string $currentScript, string $currentAction, i
 
     $nextIndex = $currentIndex + 1;
     if (!isset($menuItems[$nextIndex])) {
-        $nextIndex = 0;
+        return null;
     }
 
     return $menuItems[$nextIndex];
