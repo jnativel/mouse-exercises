@@ -86,7 +86,6 @@ if ($isCopyPasteExercise): ?>
                             <button type="button" class="copy-menu-item" disabled>Nouveau</button>
                             <button type="button" class="copy-menu-item" disabled>Couper</button>
                             <button type="button" class="copy-menu-item" data-copy-command="copy">Copier</button>
-                            <button type="button" class="copy-menu-item" disabled>Envoyer pâte</button>
                             <button type="button" class="copy-menu-item" disabled>Renommer</button>
                             <button type="button" class="copy-menu-item is-separator-top" disabled>Supprimer</button>
                         </div>
@@ -102,7 +101,7 @@ if ($isCopyPasteExercise): ?>
                         <div class="copy-menu" data-paste-menu hidden>
                             <button type="button" class="copy-menu-item" disabled>Annuler</button>
                             <button type="button" class="copy-menu-item is-disabled" data-paste-command="paste">Coller</button>
-                            <button type="button" class="copy-menu-item" disabled>Envoyer pâte</button>
+                            <button type="button" class="copy-menu-item" disabled>Propriétés</button>
                         </div>
                     </div>
                 </div>

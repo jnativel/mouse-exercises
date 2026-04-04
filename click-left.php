@@ -60,7 +60,7 @@ if ($isLeftClickExercise): ?>
     <div class="exercise-zone" id="exercise-zone">
         <?php for ($i = 1; $i <= $items; $i++): ?>
             <div class="smiley-item" data-item>
-                <div class="smiley-helper">Supprimez-moi !</div>
+                <div class="smiley-helper">Cliquez-moi !</div>
 
                 <button
                     type="button"
