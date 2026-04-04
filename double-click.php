@@ -81,7 +81,7 @@ if ($isDoubleClickExercise): ?>
     <div class="exercise-zone completion-hideable" id="exercise-zone">
         <?php for ($i = 1; $i <= $items; $i++): ?>
             <div class="smiley-item" data-item>
-                <div class="smiley-helper">Double-cliquez sur moi !</div>
+                <div class="action-label">Double-cliquez sur moi !</div>
 
                 <button
                     type="button"

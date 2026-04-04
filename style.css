@@ -261,7 +261,7 @@ body {
     min-height: 190px;
 }
 
-.smiley-helper {
+.action-label {
     background: #4caf50;
     color: #fff;
     border: 2px solid #2e7d32;
@@ -358,7 +358,7 @@ body {
     pointer-events: none;
 }
 
-.smiley-item.is-done .smiley-helper {
+.smiley-item.is-done .action-label {
     opacity: 0.35;
 }
 
@@ -529,7 +529,7 @@ body {
         font-size: 34px;
     }
 
-    .smiley-helper,
+    .action-label,
     .btn,
     .status-box,
     .sidebar-box p,
@@ -542,24 +542,24 @@ body {
     position: relative;
 }
 
-.fake-context-menu {
+.context-menu {
     position: fixed;
     top: 0;
     left: 0;
-    min-width: 160px;
+    min-width: 150px;
     background: #f2f2f2;
     border: 1px solid #bdbdbd;
     box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
-    z-index: 20;
+    z-index: 30;
     text-align: left;
     overflow: hidden;
 }
 
-.fake-context-menu[hidden] {
+.context-menu[hidden] {
     display: none;
 }
 
-.fake-context-item {
+.context-menu-item {
     display: block;
     width: 100%;
     background: #f2f2f2;
@@ -572,23 +572,25 @@ body {
     color: #222;
 }
 
-.fake-context-item:last-child {
+.context-menu-item:last-child {
     border-bottom: none;
 }
 
-.fake-context-item:hover,
-.fake-context-item:focus {
+.context-menu-item:hover,
+.context-menu-item:focus {
     background: #dfe8ff;
     outline: none;
 }
 
-.fake-context-item.is-delete {
+.context-menu-item.is-delete,
+.context-menu-item.is-separator-top {
     border-top: 2px solid #8f8f8f;
     margin-top: 4px;
 }
 
-.fake-context-item[disabled] {
-    color: #777;
+.context-menu-item[disabled],
+.context-menu-item.is-disabled {
+    color: #8a8a8a;
     cursor: default;
     background: #f2f2f2;
 }
@@ -602,40 +604,50 @@ body {
 }
 
 body.mode-chrono .menu-note,
-body.mode-chrono .smiley-helper,
-body.mode-chrono .dragdrop-label,
-body.mode-chrono .copy-paste-label {
+body.mode-chrono .action-label {
     display: none;
 }
 
-.dragdrop-row {
+.workflow-exercise {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.workflow-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 40px;
     align-items: stretch;
+}
+
+.workflow-row--dragdrop {
+    gap: 40px;
     margin-bottom: 28px;
 }
 
-.dragdrop-side {
+.workflow-row--copy {
+    gap: 56px;
+}
+
+.workflow-side {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 12px;
+    position: relative;
+}
+
+.workflow-row--dragdrop .workflow-side {
     min-height: 220px;
 }
 
-.dragdrop-label {
-    background: #4caf50;
-    color: #fff;
-    border: 2px solid #2e7d32;
-    border-radius: 10px;
-    padding: 10px 18px;
-    font-size: 24px;
-    font-weight: bold;
-    text-align: center;
-    width: 100%;
-    max-width: 220px;
+.workflow-row--copy .workflow-side {
+    min-height: 170px;
+}
+
+.workflow-row--copy .action-label {
+    max-width: 260px;
 }
 
 .drop-zone {
@@ -682,7 +694,7 @@ body.mode-chrono .copy-paste-label {
     background: radial-gradient(circle at 30% 30%, #ffb3ff 0%, #c000c0 70%);
 }
 
-.dragdrop-row.is-done .drag-smiley-origin {
+.workflow-row--dragdrop.is-done .drag-smiley-origin {
     visibility: hidden;
     pointer-events: none;
 }
@@ -691,50 +703,7 @@ body.mode-chrono .copy-paste-label {
     margin: 0;
 }
 
-@media (max-width: 900px) {
-    .dragdrop-row {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-}
-
-.copy-paste-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-}
-
-.copy-paste-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 56px;
-    align-items: stretch;
-}
-
-.copy-paste-side {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    position: relative;
-    min-height: 170px;
-}
-
-.copy-paste-label {
-    background: #4caf50;
-    color: #fff;
-    border: 2px solid #2e7d32;
-    border-radius: 10px;
-    padding: 10px 18px;
-    font-size: 24px;
-    font-weight: bold;
-    text-align: center;
-    width: 100%;
-    max-width: 260px;
-}
-
-.copy-paste-target {
+.workflow-target {
     width: 100%;
     max-width: 260px;
     min-height: 120px;
@@ -765,61 +734,16 @@ body.mode-chrono .copy-paste-label {
     background: #f7f7f7;
 }
 
-.copy-menu {
-    position: fixed;
-    top: 0;
-    left: 0;
-    min-width: 150px;
-    background: #f2f2f2;
-    border: 1px solid #bdbdbd;
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
-    z-index: 30;
-    text-align: left;
-    overflow: hidden;
-}
-
-.copy-menu[hidden] {
-    display: none;
-}
-
-.copy-menu-item {
-    display: block;
-    width: 100%;
-    background: #f2f2f2;
-    border: none;
-    border-bottom: 1px solid #d6d6d6;
-    text-align: left;
-    padding: 12px 14px;
-    font-size: 18px;
-    cursor: pointer;
-    color: #222;
-}
-
-.copy-menu-item:last-child {
-    border-bottom: none;
-}
-
-.copy-menu-item:hover,
-.copy-menu-item:focus {
-    background: #dfe8ff;
-    outline: none;
-}
-
-.copy-menu-item[disabled],
-.copy-menu-item.is-disabled {
-    color: #8a8a8a;
-    cursor: default;
-    background: #f2f2f2;
-}
-
-.copy-menu-item.is-separator-top {
-    border-top: 2px solid #8f8f8f;
-    margin-top: 4px;
-}
-
 @media (max-width: 900px) {
-    .copy-paste-row {
+    .workflow-row {
         grid-template-columns: 1fr;
+    }
+
+    .workflow-row--dragdrop {
+        gap: 20px;
+    }
+
+    .workflow-row--copy {
         gap: 24px;
     }
 }

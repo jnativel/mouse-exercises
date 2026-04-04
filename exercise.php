@@ -151,7 +151,7 @@ if ($isLeftClickExercise) {
             user-select: none;
         }
 
-        .smiley-helper {
+        .action-label {
             background: #4caf50;
             color: #fff;
             border: 2px solid #2e7d32;
@@ -316,7 +316,7 @@ if ($isLeftClickExercise) {
                 font-size: 22px;
             }
 
-            .smiley-helper,
+            .action-label,
             .btn,
             .status-box {
                 font-size: 20px;
@@ -350,7 +350,7 @@ if ($isLeftClickExercise) {
                 <div class="exercise-zone" id="exercise-zone">
                     <?php for ($i = 1; $i <= $items; $i++): ?>
                         <div class="smiley-item" data-item>
-                            <div class="smiley-helper">Cliquez sur moi !</div>
+                            <div class="action-label">Cliquez sur moi !</div>
 
                             <button
                                 type="button"
