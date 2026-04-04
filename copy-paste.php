@@ -28,6 +28,14 @@ if ($size > 200) {
 $normalizedAction = strtolower($action);
 $isCopyPasteExercise = in_array($normalizedAction, ['copy-paste', 'copier-coller', 'copy-paste-right-click'], true);
 require_once __DIR__ . '/exercise-menu.php';
+$previousExercise = getPreviousExerciseMenuItem(basename(__FILE__), 'copy-paste', $items);
+$previousHref = $previousExercise
+    ? $previousExercise['file'] . '?' . http_build_query([
+        'action' => $previousExercise['action'],
+        'items' => $previousExercise['items'],
+        'size' => $previousExercise['size'],
+    ])
+    : null;
 $nextExercise = getNextExerciseMenuItem(basename(__FILE__), 'copy-paste', $items);
 $nextHref = $nextExercise
     ? $nextExercise['file'] . '?' . http_build_query([
@@ -35,7 +43,7 @@ $nextHref = $nextExercise
         'items' => $nextExercise['items'],
         'size' => $nextExercise['size'],
     ])
-    : '?action=' . urlencode($action) . '&items=' . (int) $items . '&size=' . (int) $size;
+    : null;
 
 $pageTitle = 'Exercices souris';
 $exerciseTitle = 'Copier / coller (x ' . $items . ')';
@@ -114,6 +122,15 @@ if ($isCopyPasteExercise): ?>
         </div>
 
         <div class="controls">
+            <?php if ($previousHref !== null): ?>
+                <a
+                    class="btn btn-green"
+                    href="<?= htmlspecialchars($previousHref, ENT_QUOTES, 'UTF-8') ?>"
+                >
+                    Étape précédente
+                </a>
+            <?php endif; ?>
+
             <a
                 class="btn btn-orange"
                 href="?action=<?= urlencode($action) ?>&items=<?= (int) $items ?>&size=<?= (int) $size ?>"
@@ -121,12 +138,14 @@ if ($isCopyPasteExercise): ?>
                 Recommencer
             </a>
 
-            <a
-                class="btn btn-green"
-                href="<?= htmlspecialchars($nextHref, ENT_QUOTES, 'UTF-8') ?>"
-            >
-                Exemple suivant
-            </a>
+            <?php if ($nextHref !== null): ?>
+                <a
+                    class="btn btn-green"
+                    href="<?= htmlspecialchars($nextHref, ENT_QUOTES, 'UTF-8') ?>"
+                >
+                    Étape suivante
+                </a>
+            <?php endif; ?>
         </div>
     </div>
 
@@ -349,13 +368,5 @@ if ($isCopyPasteExercise): ?>
 
 $mainContent = (string) ob_get_clean();
 
-$sidebarTitle = 'Informations';
-$sidebarContent = '
-    <p><strong>Action :</strong> ' . htmlspecialchars($action, ENT_QUOTES, 'UTF-8') . '</p>
-    <p><strong>Nombre d’items :</strong> ' . $items . '</p>
-    <p><strong>Taille :</strong> ' . $size . ' px</p>
-    <p><strong>But :</strong> clic droit sur la source, Copier, puis clic droit sur la zone cible et Coller.</p>
-    <p><strong>Exemple :</strong> ?action=copy-paste&amp;items=3&amp;size=100</p>
-';
-
 require __DIR__ . '/template.php';
+

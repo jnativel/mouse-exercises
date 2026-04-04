@@ -28,6 +28,14 @@ if ($size > 200) {
 $normalizedAction = strtolower($action);
 $isDragDropExercise = in_array($normalizedAction, ['drag-drop', 'glisser-deposer', 'glisser-déposer', 'drag-and-drop'], true);
 require_once __DIR__ . '/exercise-menu.php';
+$previousExercise = getPreviousExerciseMenuItem(basename(__FILE__), 'drag-drop', $items);
+$previousHref = $previousExercise
+    ? $previousExercise['file'] . '?' . http_build_query([
+        'action' => $previousExercise['action'],
+        'items' => $previousExercise['items'],
+        'size' => $previousExercise['size'],
+    ])
+    : null;
 $nextExercise = getNextExerciseMenuItem(basename(__FILE__), 'drag-drop', $items);
 $nextHref = $nextExercise
     ? $nextExercise['file'] . '?' . http_build_query([
@@ -35,7 +43,7 @@ $nextHref = $nextExercise
         'items' => $nextExercise['items'],
         'size' => $nextExercise['size'],
     ])
-    : '?action=' . urlencode($action) . '&items=' . (int) $items . '&size=' . (int) $size;
+    : null;
 
 $pageTitle = 'Exercices souris';
 $exerciseTitle = 'Glisser / déposer (x ' . $items . ')';
@@ -100,6 +108,15 @@ if ($isDragDropExercise): ?>
         </div>
 
         <div class="controls">
+            <?php if ($previousHref !== null): ?>
+                <a
+                    class="btn btn-green"
+                    href="<?= htmlspecialchars($previousHref, ENT_QUOTES, 'UTF-8') ?>"
+                >
+                    Étape précédente
+                </a>
+            <?php endif; ?>
+
             <a
                 class="btn btn-orange"
                 href="?action=<?= urlencode($action) ?>&items=<?= (int) $items ?>&size=<?= (int) $size ?>"
@@ -107,12 +124,14 @@ if ($isDragDropExercise): ?>
                 Recommencer
             </a>
 
-            <a
-                class="btn btn-green"
-                href="<?= htmlspecialchars($nextHref, ENT_QUOTES, 'UTF-8') ?>"
-            >
-                Exemple suivant
-            </a>
+            <?php if ($nextHref !== null): ?>
+                <a
+                    class="btn btn-green"
+                    href="<?= htmlspecialchars($nextHref, ENT_QUOTES, 'UTF-8') ?>"
+                >
+                    Étape suivante
+                </a>
+            <?php endif; ?>
         </div>
     </div>
 
@@ -223,13 +242,5 @@ if ($isDragDropExercise): ?>
 
 $mainContent = (string) ob_get_clean();
 
-$sidebarTitle = 'Informations';
-$sidebarContent = '
-    <p><strong>Action :</strong> ' . htmlspecialchars($action, ENT_QUOTES, 'UTF-8') . '</p>
-    <p><strong>Nombre d’items :</strong> ' . $items . '</p>
-    <p><strong>Taille :</strong> ' . $size . ' px</p>
-    <p><strong>But :</strong> cliquer, garder appuyé, glisser puis relâcher.</p>
-    <p><strong>Exemple :</strong> ?action=drag-drop&amp;items=3&amp;size=100</p>
-';
-
 require __DIR__ . '/template.php';
+
