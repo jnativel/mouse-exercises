@@ -22,7 +22,7 @@ function getExerciseMenuItems(): array
 /**
  * Configuration du mode chrono.
  *
- * @return array<int, array{label: string, file: string, action: string, size: int, stages: int[], delay: int[]}>
+ * @return array<int, array{label: string, file: string, action: string, size: int, stages: int[], delay: array<int, int|float>}>
  */
 function getExerciseMenuChronoItems(): array
 {
@@ -63,7 +63,7 @@ function normalizeExerciseMode(?string $mode): string
 /**
  * Retourne le délai par action (en secondes) pour un mode chrono.
  */
-function getChronoDelayForAction(string $action, string $mode): ?int
+function getChronoDelayForAction(string $action, string $mode): ?float
 {
     $mode = normalizeExerciseMode($mode);
     if ($mode === 'classic') {
@@ -87,7 +87,11 @@ function getChronoDelayForAction(string $action, string $mode): ?int
         }
 
         $value = $item['delay'][$delayIndex] ?? null;
-        return is_int($value) ? $value : null;
+        if (is_int($value) || is_float($value)) {
+            return (float) $value;
+        }
+
+        return null;
     }
 
     return null;
@@ -150,6 +154,29 @@ function renderExerciseMenu(
         : getExerciseMenuChronoItems();
 
     $html = '<nav class="exercise-menu" aria-label="Choisir un exercice">';
+    $html .= '<ul class="exercise-menu-list">';
+
+    foreach ($sourceItems as $item) {
+        $firstStageItems = (int) ($item['stages'][0] ?? 1);
+        $query = http_build_query([
+            'action' => $item['action'],
+            'items' => $firstStageItems,
+            'size' => $item['size'],
+            'mode' => $currentMode,
+        ]);
+
+        $href = $item['file'] . '?' . $query;
+        $isActive = $currentScript === $item['file']
+            && $normalizedCurrentAction === strtolower($item['action']);
+
+        $html .= '<li class="exercise-menu-item">';
+        $html .= '<a class="exercise-menu-link' . ($isActive ? ' is-active' : '') . '" href="' . htmlspecialchars($href, ENT_QUOTES, 'UTF-8') . '">';
+        $html .= htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8');
+        $html .= '</a>';
+        $html .= '</li>';
+    }
+
+    $html .= '</ul>';
     $html .= '<div class="exercise-mode-list" aria-label="Choisir un mode">';
 
     $modeLabels = [
@@ -200,29 +227,6 @@ function renderExerciseMenu(
     }
 
     $html .= '</div>';
-    $html .= '<ul class="exercise-menu-list">';
-
-    foreach ($sourceItems as $item) {
-        $firstStageItems = (int) ($item['stages'][0] ?? 1);
-        $query = http_build_query([
-            'action' => $item['action'],
-            'items' => $firstStageItems,
-            'size' => $item['size'],
-            'mode' => $currentMode,
-        ]);
-
-        $href = $item['file'] . '?' . $query;
-        $isActive = $currentScript === $item['file']
-            && $normalizedCurrentAction === strtolower($item['action']);
-
-        $html .= '<li class="exercise-menu-item">';
-        $html .= '<a class="exercise-menu-link' . ($isActive ? ' is-active' : '') . '" href="' . htmlspecialchars($href, ENT_QUOTES, 'UTF-8') . '">';
-        $html .= htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8');
-        $html .= '</a>';
-        $html .= '</li>';
-    }
-
-    $html .= '</ul>';
     $html .= '</nav>';
 
     return $html;
