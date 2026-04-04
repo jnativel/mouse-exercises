@@ -162,7 +162,9 @@ if ($isDragDropExercise): ?>
             const remainingCount = document.getElementById('remaining-count');
             const dragNote = document.getElementById('drag-note');
             const nextStepButton = document.getElementById('next-step-button');
-            const instruction = document.querySelector('.instruction');
+            const instructionCard = document.getElementById('exercise-instruction-card');
+            const feedbackCard = document.getElementById('exercise-feedback-card');
+            const feedbackMessage = document.getElementById('exercise-feedback-message');
             const countdownValue = document.getElementById('countdown-value');
             const countdownProgress = document.getElementById('countdown-progress');
             const restartButton = exercise.querySelector('.btn-orange');
@@ -187,6 +189,20 @@ if ($isDragDropExercise): ?>
                 nextStepButton.classList.remove('is-hidden');
             }
 
+            function showFeedback(message, stateClass) {
+                if (instructionCard) {
+                    instructionCard.classList.add('is-hidden');
+                }
+
+                if (!feedbackCard || !feedbackMessage) {
+                    return;
+                }
+
+                feedbackMessage.textContent = message;
+                feedbackCard.classList.remove('is-hidden', 'is-success-feedback', 'is-timeout-feedback');
+                feedbackCard.classList.add(stateClass);
+            }
+
             function completeExercise() {
                 if (isGameOver || isCompleted) {
                     return;
@@ -196,11 +212,7 @@ if ($isDragDropExercise): ?>
                     window.clearInterval(timerId);
                 }
                 enableNextStep();
-                if (instruction) {
-                    instruction.textContent = 'Bravo ! Tous les smileys ont été déplacés.';
-                    instruction.classList.remove('is-timeout-feedback');
-                    instruction.classList.add('is-success-feedback');
-                }
+                showFeedback('Bravo ! Tous les smileys ont été déplacés.', 'is-success-feedback');
             }
 
             function handleGameOver() {
@@ -218,11 +230,7 @@ if ($isDragDropExercise): ?>
                     button.classList.add('is-hidden');
                     button.setAttribute('aria-hidden', 'true');
                 });
-                if (instruction) {
-                    instruction.textContent = 'Temps écoulé. Vous pouvez recommencer.';
-                    instruction.classList.remove('is-success-feedback');
-                    instruction.classList.add('is-timeout-feedback');
-                }
+                showFeedback('Temps écoulé. Vous pouvez recommencer.', 'is-timeout-feedback');
                 if (dragNote) {
                     dragNote.textContent = 'Temps écoulé.';
                 }

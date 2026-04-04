@@ -47,10 +47,14 @@ $exerciseMenu = renderExerciseMenu($currentScript, $currentAction, $currentItems
             </h1>
         </section>
 
-        <section class="card">
+        <section class="card" id="exercise-instruction-card">
             <p class="instruction">
                 <?= htmlspecialchars($exerciseInstruction, ENT_QUOTES, 'UTF-8') ?>
             </p>
+        </section>
+
+        <section class="card feedback-card is-hidden" id="exercise-feedback-card" aria-live="polite">
+            <p class="feedback-message" id="exercise-feedback-message"></p>
         </section>
 
         <section class="card">
