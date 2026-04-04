@@ -53,6 +53,7 @@ $nextHref = $nextExercise
         'mode' => $mode,
     ])
     : null;
+$showPreviousStepButton = $mode === 'classic';
 
 $pageTitle = 'Exercices souris';
 $exerciseTitle = 'Double clic';
@@ -107,7 +108,7 @@ if ($isDoubleClickExercise): ?>
         Restants : <span id="remaining-count"><?= (int) $items ?></span> / <?= (int) $items ?>
     </div>
     <div class="controls">
-        <?php if ($previousHref !== null): ?>
+        <?php if ($showPreviousStepButton && $previousHref !== null): ?>
             <a
                 class="btn btn-green"
                 href="<?= htmlspecialchars($previousHref, ENT_QUOTES, 'UTF-8') ?>"

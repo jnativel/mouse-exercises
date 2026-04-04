@@ -53,6 +53,7 @@ $nextHref = $nextExercise
         'mode' => $mode,
     ])
     : null;
+$showPreviousStepButton = $mode === 'classic';
 
 $pageTitle = 'Exercices souris';
 $exerciseTitle = 'Couper / coller';
@@ -134,7 +135,7 @@ if ($isCutPasteExercise): ?>
         </div>
 
         <div class="controls">
-            <?php if ($previousHref !== null): ?>
+            <?php if ($showPreviousStepButton && $previousHref !== null): ?>
                 <a
                     class="btn btn-green"
                     href="<?= htmlspecialchars($previousHref, ENT_QUOTES, 'UTF-8') ?>"
