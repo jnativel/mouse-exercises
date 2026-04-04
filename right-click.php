@@ -226,7 +226,7 @@ if ($isRightClickExercise): ?>
                     button.setAttribute('tabindex', '-1');
                 });
                 if (instruction) {
-                    instruction.textContent = 'Temps écoulé. Vous pouvez uniquement recommencer.';
+                    instruction.textContent = 'Temps écoulé. Vous pouvez recommencer.';
                     instruction.classList.remove('is-success-feedback');
                     instruction.classList.add('is-timeout-feedback');
                 }
