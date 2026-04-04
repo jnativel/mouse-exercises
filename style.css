@@ -74,6 +74,38 @@ body {
     gap: 10px;
 }
 
+.exercise-mode-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin: 0 0 16px;
+}
+
+.exercise-mode-link {
+    display: block;
+    background: #fffbe8;
+    border: 2px solid #d8c48a;
+    border-radius: 8px;
+    color: #3d2e00;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 1.3;
+    padding: 9px 12px;
+    text-decoration: none;
+}
+
+.exercise-mode-link:hover,
+.exercise-mode-link:focus {
+    background: #fff2c4;
+    border-color: #cf9e26;
+    outline: none;
+}
+
+.exercise-mode-link.is-active {
+    background: #ffe9a8;
+    border-color: #bf8800;
+}
+
 .exercise-menu-link {
     display: block;
     background: #ffffff;

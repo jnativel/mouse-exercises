@@ -10,6 +10,7 @@ declare(strict_types=1);
 $action = isset($_GET['action']) ? trim((string) $_GET['action']) : 'right-click';
 $items  = isset($_GET['items']) ? (int) $_GET['items'] : 6;
 $size   = isset($_GET['size']) ? (int) $_GET['size'] : 100;
+$mode   = isset($_GET['mode']) ? (string) $_GET['mode'] : 'classic';
 
 if ($items < 1) {
     $items = 1;
@@ -28,12 +29,16 @@ if ($size > 200) {
 $normalizedAction = strtolower($action);
 $isRightClickExercise = in_array($normalizedAction, ['right-click', 'clic-droit', 'click-right', 'clique-droit'], true);
 require_once __DIR__ . '/exercise-menu.php';
+$mode = normalizeExerciseMode($mode);
+$chronoDelay = getChronoDelayForAction('right-click', $mode);
+$countdownSeconds = $chronoDelay !== null ? $items * $chronoDelay : null;
 $previousExercise = getPreviousExerciseMenuItem(basename(__FILE__), 'right-click', $items);
 $previousHref = $previousExercise
     ? $previousExercise['file'] . '?' . http_build_query([
         'action' => $previousExercise['action'],
         'items' => $previousExercise['items'],
         'size' => $previousExercise['size'],
+        'mode' => $mode,
     ])
     : null;
 $nextExercise = getNextExerciseMenuItem(basename(__FILE__), 'right-click', $items);
@@ -42,11 +47,12 @@ $nextHref = $nextExercise
         'action' => $nextExercise['action'],
         'items' => $nextExercise['items'],
         'size' => $nextExercise['size'],
+        'mode' => $mode,
     ])
     : null;
 
 $pageTitle = 'Exercices souris';
-$exerciseTitle = 'Clic droit (x ' . $items . ')';
+$exerciseTitle = 'Clic droit (x ' . $items . ') — Mode ' . getExerciseModeLabel($mode);
 
 if ($isRightClickExercise) {
     $exerciseInstruction = 'Faites un clic droit sur un smiley. Un menu va apparaître. Cliquez ensuite sur “Supprimer”.';
@@ -95,6 +101,11 @@ if ($isRightClickExercise): ?>
     <div class="status-box completion-hideable">
         Restants : <span id="remaining-count"><?= (int) $items ?></span> / <?= (int) $items ?>
     </div>
+    <?php if ($countdownSeconds !== null): ?>
+    <div class="status-box completion-hideable">
+        Temps : <span id="countdown-value"><?= (int) $countdownSeconds ?></span>s
+    </div>
+    <?php endif; ?>
 
     <div class="menu-note completion-hideable" id="menu-note">
         Astuce : faites d’abord un clic droit sur le smiley.
@@ -112,7 +123,7 @@ if ($isRightClickExercise): ?>
 
         <a
             class="btn btn-orange"
-            href="?action=<?= urlencode($action) ?>&items=<?= (int) $items ?>&size=<?= (int) $size ?>"
+            href="?action=<?= urlencode($action) ?>&items=<?= (int) $items ?>&size=<?= (int) $size ?>&mode=<?= urlencode($mode) ?>"
         >
             Recommencer
         </a>
@@ -141,12 +152,18 @@ if ($isRightClickExercise): ?>
             const menuNote = document.getElementById('menu-note');
             const nextStepButton = document.getElementById('next-step-button');
             const instruction = document.querySelector('.instruction');
+            const countdownValue = document.getElementById('countdown-value');
+            const restartButton = exercise.querySelector('.btn-orange');
 
             if (!zone || !exercise) {
                 return;
             }
 
             let remaining = zone.querySelectorAll('[data-item]').length;
+            let isGameOver = false;
+            let isCompleted = false;
+            let timerId = null;
+            let remainingSeconds = <?= $countdownSeconds !== null ? (int) $countdownSeconds : 'null' ?>;
 
             function enableNextStep() {
                 if (!nextStepButton) {
@@ -159,6 +176,13 @@ if ($isRightClickExercise): ?>
             }
 
             function completeExercise() {
+                if (isGameOver || isCompleted) {
+                    return;
+                }
+                isCompleted = true;
+                if (timerId !== null) {
+                    window.clearInterval(timerId);
+                }
                 enableNextStep();
                 if (instruction) {
                     instruction.textContent = 'Bravo ! Tous les smileys ont été supprimés.';
@@ -170,6 +194,45 @@ if ($isRightClickExercise): ?>
                 zone.querySelectorAll('.fake-context-menu').forEach(function (menu) {
                     menu.hidden = true;
                 });
+            }
+
+            function handleGameOver() {
+                if (isCompleted || isGameOver) {
+                    return;
+                }
+                isGameOver = true;
+                if (timerId !== null) {
+                    window.clearInterval(timerId);
+                }
+                closeAllMenus();
+                exercise.querySelectorAll('.controls .btn').forEach(function (button) {
+                    if (button === restartButton) {
+                        return;
+                    }
+                    button.classList.add('is-disabled');
+                    button.setAttribute('aria-disabled', 'true');
+                    button.setAttribute('tabindex', '-1');
+                });
+                if (instruction) {
+                    instruction.textContent = 'Temps écoulé. Game over ! Vous pouvez uniquement recommencer.';
+                    instruction.classList.remove('is-success-feedback');
+                }
+                if (menuNote) {
+                    menuNote.textContent = 'Temps écoulé.';
+                }
+            }
+
+            if (typeof remainingSeconds === 'number' && countdownValue) {
+                timerId = window.setInterval(function () {
+                    if (isCompleted || isGameOver) {
+                        return;
+                    }
+                    remainingSeconds--;
+                    countdownValue.textContent = String(Math.max(0, remainingSeconds));
+                    if (remainingSeconds <= 0) {
+                        handleGameOver();
+                    }
+                }, 1000);
             }
 
             function positionMenuAtClick(menu, event) {
@@ -196,6 +259,9 @@ if ($isRightClickExercise): ?>
             }, true);
 
             zone.addEventListener('contextmenu', function (event) {
+                if (isGameOver || isCompleted) {
+                    return;
+                }
                 event.preventDefault();
 
                 const button = event.target.closest('.smiley-btn');
@@ -229,6 +295,9 @@ if ($isRightClickExercise): ?>
             });
 
             zone.addEventListener('click', function (event) {
+                if (isGameOver || isCompleted) {
+                    return;
+                }
                 const deleteButton = event.target.closest('[data-delete]');
 
                 if (deleteButton) {

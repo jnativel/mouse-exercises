@@ -20,6 +20,95 @@ function getExerciseMenuItems(): array
 }
 
 /**
+ * Configuration du mode chrono.
+ *
+ * @return array<int, array{label: string, file: string, action: string, size: int, stages: int[], delay: int[]}>
+ */
+function getExerciseMenuChronoItems(): array
+{
+    return [
+        ['label' => 'Clic gauche', 'file' => 'click-left.php', 'action' => 'click-left', 'size' => 100, 'stages' => [24], 'delay' => [2, 3, 4]],
+        ['label' => 'Double clic', 'file' => 'double-click.php', 'action' => 'double-click', 'size' => 100, 'stages' => [24], 'delay' => [2, 3, 4]],
+        ['label' => 'Clic droit', 'file' => 'right-click.php', 'action' => 'right-click', 'size' => 100, 'stages' => [12], 'delay' => [2, 3, 4]],
+        ['label' => 'Glisser déposer', 'file' => 'drag-drop.php', 'action' => 'drag-drop', 'size' => 100, 'stages' => [8], 'delay' => [2, 3, 4]],
+        ['label' => 'Copier coller', 'file' => 'copy-paste.php', 'action' => 'copy-paste', 'size' => 100, 'stages' => [8], 'delay' => [2, 3, 4]],
+        ['label' => 'Couper coller', 'file' => 'cut-paste.php', 'action' => 'cut-paste', 'size' => 100, 'stages' => [8], 'delay' => [2, 3, 4]],
+    ];
+}
+
+/**
+ * Retourne les identifiants de mode supportés.
+ *
+ * @return array<int, string>
+ */
+function getSupportedExerciseModes(): array
+{
+    return ['classic', 'chrono-expert', 'chrono-normal', 'chrono-beginner'];
+}
+
+/**
+ * Retourne un mode valide.
+ */
+function normalizeExerciseMode(?string $mode): string
+{
+    $mode = is_string($mode) ? strtolower(trim($mode)) : '';
+
+    if (in_array($mode, getSupportedExerciseModes(), true)) {
+        return $mode;
+    }
+
+    return 'classic';
+}
+
+/**
+ * Retourne le délai par action (en secondes) pour un mode chrono.
+ */
+function getChronoDelayForAction(string $action, string $mode): ?int
+{
+    $mode = normalizeExerciseMode($mode);
+    if ($mode === 'classic') {
+        return null;
+    }
+
+    $delayIndexByMode = [
+        'chrono-expert' => 0,
+        'chrono-normal' => 1,
+        'chrono-beginner' => 2,
+    ];
+
+    $delayIndex = $delayIndexByMode[$mode] ?? null;
+    if (!is_int($delayIndex)) {
+        return null;
+    }
+
+    foreach (getExerciseMenuChronoItems() as $item) {
+        if (strtolower($item['action']) !== strtolower(trim($action))) {
+            continue;
+        }
+
+        $value = $item['delay'][$delayIndex] ?? null;
+        return is_int($value) ? $value : null;
+    }
+
+    return null;
+}
+
+/**
+ * Libellé lisible du mode.
+ */
+function getExerciseModeLabel(string $mode): string
+{
+    $mode = normalizeExerciseMode($mode);
+
+    return match ($mode) {
+        'chrono-expert' => 'Chrono Expert',
+        'chrono-normal' => 'Chrono Normal',
+        'chrono-beginner' => 'Chrono Débutant',
+        default => 'Classique',
+    };
+}
+
+/**
  * Déplie le menu en séquence d'étapes pour la navigation précédente/suivante.
  *
  * @return array<int, array{label: string, file: string, action: string, items: int, size: int}>
@@ -49,20 +138,50 @@ function getExerciseStepSequence(): array
 function renderExerciseMenu(
     ?string $currentScript = null,
     ?string $currentAction = null,
-    ?int $currentItems = null
+    ?int $currentItems = null,
+    ?string $currentMode = null
 ): string {
     $currentScript = $currentScript ?? basename((string) ($_SERVER['PHP_SELF'] ?? ''));
     $normalizedCurrentAction = is_string($currentAction) ? strtolower(trim($currentAction)) : null;
+    $currentMode = normalizeExerciseMode($currentMode);
+
+    $sourceItems = $currentMode === 'classic'
+        ? getExerciseMenuItems()
+        : getExerciseMenuChronoItems();
 
     $html = '<nav class="exercise-menu" aria-label="Choisir un exercice">';
+    $html .= '<div class="exercise-mode-list" aria-label="Choisir un mode">';
+
+    $modeLabels = [
+        'classic' => 'Classique',
+        'chrono-beginner' => 'Chrono Débutant',
+        'chrono-normal' => 'Chrono Normal',
+        'chrono-expert' => 'Chrono Expert',
+    ];
+
+    foreach ($modeLabels as $modeKey => $modeLabel) {
+        $modeHref = $currentScript . '?' . http_build_query([
+            'action' => $currentAction ?? '',
+            'items' => $currentItems ?? '',
+            'size' => 100,
+            'mode' => $modeKey,
+        ]);
+        $isModeActive = $currentMode === $modeKey;
+        $html .= '<a class="exercise-mode-link' . ($isModeActive ? ' is-active' : '') . '" href="' . htmlspecialchars($modeHref, ENT_QUOTES, 'UTF-8') . '">';
+        $html .= htmlspecialchars($modeLabel, ENT_QUOTES, 'UTF-8');
+        $html .= '</a>';
+    }
+
+    $html .= '</div>';
     $html .= '<ul class="exercise-menu-list">';
 
-    foreach (getExerciseMenuItems() as $item) {
+    foreach ($sourceItems as $item) {
         $firstStageItems = (int) ($item['stages'][0] ?? 1);
         $query = http_build_query([
             'action' => $item['action'],
             'items' => $firstStageItems,
             'size' => $item['size'],
+            'mode' => $currentMode,
         ]);
 
         $href = $item['file'] . '?' . $query;

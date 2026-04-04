@@ -10,6 +10,7 @@ declare(strict_types=1);
 $action = isset($_GET['action']) ? trim((string) $_GET['action']) : 'drag-drop';
 $items  = isset($_GET['items']) ? (int) $_GET['items'] : 3;
 $size   = isset($_GET['size']) ? (int) $_GET['size'] : 100;
+$mode   = isset($_GET['mode']) ? (string) $_GET['mode'] : 'classic';
 
 if ($items < 1) {
     $items = 1;
@@ -28,12 +29,16 @@ if ($size > 200) {
 $normalizedAction = strtolower($action);
 $isDragDropExercise = in_array($normalizedAction, ['drag-drop', 'glisser-deposer', 'glisser-déposer', 'drag-and-drop'], true);
 require_once __DIR__ . '/exercise-menu.php';
+$mode = normalizeExerciseMode($mode);
+$chronoDelay = getChronoDelayForAction('drag-drop', $mode);
+$countdownSeconds = $chronoDelay !== null ? $items * $chronoDelay : null;
 $previousExercise = getPreviousExerciseMenuItem(basename(__FILE__), 'drag-drop', $items);
 $previousHref = $previousExercise
     ? $previousExercise['file'] . '?' . http_build_query([
         'action' => $previousExercise['action'],
         'items' => $previousExercise['items'],
         'size' => $previousExercise['size'],
+        'mode' => $mode,
     ])
     : null;
 $nextExercise = getNextExerciseMenuItem(basename(__FILE__), 'drag-drop', $items);
@@ -42,11 +47,12 @@ $nextHref = $nextExercise
         'action' => $nextExercise['action'],
         'items' => $nextExercise['items'],
         'size' => $nextExercise['size'],
+        'mode' => $mode,
     ])
     : null;
 
 $pageTitle = 'Exercices souris';
-$exerciseTitle = 'Glisser / déposer (x ' . $items . ')';
+$exerciseTitle = 'Glisser / déposer (x ' . $items . ') — Mode ' . getExerciseModeLabel($mode);
 
 if ($isDragDropExercise) {
     $exerciseInstruction = 'Index sur le bouton gauche de la souris, cliquez sur le smiley, gardez le clic appuyé, glissez vers la droite, puis relâchez dans la zone.';
@@ -98,6 +104,11 @@ if ($isDragDropExercise): ?>
         <div class="status-box completion-hideable">
             Restants : <span id="remaining-count"><?= (int) $items ?></span> / <?= (int) $items ?>
         </div>
+        <?php if ($countdownSeconds !== null): ?>
+        <div class="status-box completion-hideable">
+            Temps : <span id="countdown-value"><?= (int) $countdownSeconds ?></span>s
+        </div>
+        <?php endif; ?>
 
         <div class="menu-note completion-hideable" id="drag-note">
             Astuce : cliquez, gardez appuyé, déplacez, puis relâchez.
@@ -115,7 +126,7 @@ if ($isDragDropExercise): ?>
 
             <a
                 class="btn btn-orange"
-                href="?action=<?= urlencode($action) ?>&items=<?= (int) $items ?>&size=<?= (int) $size ?>"
+                href="?action=<?= urlencode($action) ?>&items=<?= (int) $items ?>&size=<?= (int) $size ?>&mode=<?= urlencode($mode) ?>"
             >
                 Recommencer
             </a>
@@ -143,6 +154,8 @@ if ($isDragDropExercise): ?>
             const dragNote = document.getElementById('drag-note');
             const nextStepButton = document.getElementById('next-step-button');
             const instruction = document.querySelector('.instruction');
+            const countdownValue = document.getElementById('countdown-value');
+            const restartButton = exercise.querySelector('.btn-orange');
 
             if (!exercise) {
                 return;
@@ -150,6 +163,10 @@ if ($isDragDropExercise): ?>
 
             let draggedId = null;
             let remaining = exercise.querySelectorAll('[data-row]').length;
+            let isGameOver = false;
+            let isCompleted = false;
+            let timerId = null;
+            let remainingSeconds = <?= $countdownSeconds !== null ? (int) $countdownSeconds : 'null' ?>;
 
             function enableNextStep() {
                 if (!nextStepButton) {
@@ -162,6 +179,13 @@ if ($isDragDropExercise): ?>
             }
 
             function completeExercise() {
+                if (isGameOver || isCompleted) {
+                    return;
+                }
+                isCompleted = true;
+                if (timerId !== null) {
+                    window.clearInterval(timerId);
+                }
                 enableNextStep();
                 if (instruction) {
                     instruction.textContent = 'Bravo ! Tous les smileys ont été déplacés.';
@@ -169,8 +193,50 @@ if ($isDragDropExercise): ?>
                 }
             }
 
+            function handleGameOver() {
+                if (isCompleted || isGameOver) {
+                    return;
+                }
+                isGameOver = true;
+                if (timerId !== null) {
+                    window.clearInterval(timerId);
+                }
+                exercise.querySelectorAll('.controls .btn').forEach(function (button) {
+                    if (button === restartButton) {
+                        return;
+                    }
+                    button.classList.add('is-disabled');
+                    button.setAttribute('aria-disabled', 'true');
+                    button.setAttribute('tabindex', '-1');
+                });
+                if (instruction) {
+                    instruction.textContent = 'Temps écoulé. Game over ! Vous pouvez uniquement recommencer.';
+                    instruction.classList.remove('is-success-feedback');
+                }
+                if (dragNote) {
+                    dragNote.textContent = 'Temps écoulé.';
+                }
+            }
+
+            if (typeof remainingSeconds === 'number' && countdownValue) {
+                timerId = window.setInterval(function () {
+                    if (isCompleted || isGameOver) {
+                        return;
+                    }
+                    remainingSeconds--;
+                    countdownValue.textContent = String(Math.max(0, remainingSeconds));
+                    if (remainingSeconds <= 0) {
+                        handleGameOver();
+                    }
+                }, 1000);
+            }
+
             exercise.querySelectorAll('.drag-smiley').forEach(function (dragItem) {
                 dragItem.addEventListener('dragstart', function (event) {
+                    if (isGameOver || isCompleted) {
+                        event.preventDefault();
+                        return;
+                    }
                     draggedId = dragItem.getAttribute('data-drag-id');
 
                     if (event.dataTransfer) {
@@ -188,6 +254,9 @@ if ($isDragDropExercise): ?>
 
             exercise.querySelectorAll('.drop-zone').forEach(function (dropZone) {
                 dropZone.addEventListener('dragover', function (event) {
+                    if (isGameOver || isCompleted) {
+                        return;
+                    }
                     event.preventDefault();
                     dropZone.classList.add('is-hover');
 
@@ -201,6 +270,9 @@ if ($isDragDropExercise): ?>
                 });
 
                 dropZone.addEventListener('drop', function (event) {
+                    if (isGameOver || isCompleted) {
+                        return;
+                    }
                     event.preventDefault();
                     dropZone.classList.remove('is-hover');
 
