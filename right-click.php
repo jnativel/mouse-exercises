@@ -27,6 +27,15 @@ if ($size > 200) {
 
 $normalizedAction = strtolower($action);
 $isRightClickExercise = in_array($normalizedAction, ['right-click', 'clic-droit', 'click-right', 'clique-droit'], true);
+require_once __DIR__ . '/exercise-menu.php';
+$nextExercise = getNextExerciseMenuItem(basename(__FILE__), 'right-click', $items);
+$nextHref = $nextExercise
+    ? $nextExercise['file'] . '?' . http_build_query([
+        'action' => $nextExercise['action'],
+        'items' => $nextExercise['items'],
+        'size' => $nextExercise['size'],
+    ])
+    : '?action=' . urlencode($action) . '&items=' . (int) $items . '&size=' . (int) $size;
 
 $pageTitle = 'Exercices souris';
 $exerciseTitle = 'Clic droit (x ' . $items . ')';
@@ -96,7 +105,7 @@ if ($isRightClickExercise): ?>
 
         <a
             class="btn btn-green"
-            href="?action=right-click&items=12&size=100"
+            href="<?= htmlspecialchars($nextHref, ENT_QUOTES, 'UTF-8') ?>"
         >
             Exemple suivant
         </a>

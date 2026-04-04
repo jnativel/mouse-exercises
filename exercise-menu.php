@@ -25,9 +25,14 @@ function getExerciseMenuItems(): array
 /**
  * Génère le menu HTML des exercices.
  */
-function renderExerciseMenu(?string $currentScript = null): string
+function renderExerciseMenu(
+    ?string $currentScript = null,
+    ?string $currentAction = null,
+    ?int $currentItems = null
+): string
 {
     $currentScript = $currentScript ?? basename((string) ($_SERVER['PHP_SELF'] ?? ''));
+    $normalizedCurrentAction = is_string($currentAction) ? strtolower(trim($currentAction)) : null;
 
     $html = '<nav class="exercise-menu" aria-label="Choisir un exercice">';
     $html .= '<ul class="exercise-menu-list">';
@@ -40,7 +45,9 @@ function renderExerciseMenu(?string $currentScript = null): string
         ]);
 
         $href = $item['file'] . '?' . $query;
-        $isActive = $currentScript === $item['file'];
+        $isActive = $currentScript === $item['file']
+            && $normalizedCurrentAction === strtolower($item['action'])
+            && $currentItems === $item['items'];
 
         $html .= '<li class="exercise-menu-item">';
         $html .= '<a class="exercise-menu-link' . ($isActive ? ' is-active' : '') . '" href="' . htmlspecialchars($href, ENT_QUOTES, 'UTF-8') . '">';
@@ -53,4 +60,38 @@ function renderExerciseMenu(?string $currentScript = null): string
     $html .= '</nav>';
 
     return $html;
+}
+
+/**
+ * Retourne le prochain exercice défini dans le menu.
+ *
+ * @return array{label: string, file: string, action: string, items: int, size: int}|null
+ */
+function getNextExerciseMenuItem(string $currentScript, string $currentAction, int $currentItems): ?array
+{
+    $menuItems = getExerciseMenuItems();
+    $normalizedCurrentAction = strtolower(trim($currentAction));
+    $currentIndex = null;
+
+    foreach ($menuItems as $index => $item) {
+        if (
+            $currentScript === $item['file']
+            && $normalizedCurrentAction === strtolower($item['action'])
+            && $currentItems === $item['items']
+        ) {
+            $currentIndex = $index;
+            break;
+        }
+    }
+
+    if ($currentIndex === null) {
+        return null;
+    }
+
+    $nextIndex = $currentIndex + 1;
+    if (!isset($menuItems[$nextIndex])) {
+        $nextIndex = 0;
+    }
+
+    return $menuItems[$nextIndex];
 }

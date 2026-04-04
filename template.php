@@ -21,7 +21,10 @@ $sidebarContent = $sidebarContent ?? '';
 $mainContent = $mainContent ?? '';
 
 require_once __DIR__ . '/exercise-menu.php';
-$exerciseMenu = renderExerciseMenu();
+$currentScript = basename((string) ($_SERVER['PHP_SELF'] ?? ''));
+$currentAction = isset($action) ? (string) $action : null;
+$currentItems = isset($items) ? (int) $items : null;
+$exerciseMenu = renderExerciseMenu($currentScript, $currentAction, $currentItems);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
