@@ -20,7 +20,8 @@ require_once __DIR__ . '/exercise-menu.php';
 $currentScript = basename((string) ($_SERVER['PHP_SELF'] ?? ''));
 $currentAction = isset($action) ? (string) $action : null;
 $currentItems = isset($items) ? (int) $items : null;
-$exerciseMenu = renderExerciseMenu($currentScript, $currentAction, $currentItems);
+$currentMode = isset($mode) ? (string) $mode : null;
+$exerciseMenu = renderExerciseMenu($currentScript, $currentAction, $currentItems, $currentMode);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
