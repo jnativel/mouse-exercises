@@ -164,6 +164,12 @@ if ($isCutPasteExercise): ?>
             let cutId = null;
             let remaining = exercise.querySelectorAll('[data-row]').length;
 
+            function clearCutPreview() {
+                exercise.querySelectorAll('[data-cut-source].is-cut').forEach(function (button) {
+                    button.classList.remove('is-cut');
+                });
+            }
+
             function closeAllMenus() {
                 exercise.querySelectorAll('[data-copy-menu], [data-paste-menu]').forEach(function (menu) {
                     menu.hidden = true;
@@ -292,7 +298,9 @@ if ($isCutPasteExercise): ?>
                         return;
                     }
 
+                    clearCutPreview();
                     cutId = source.getAttribute('data-cut-source');
+                    source.classList.add('is-cut');
 
                     if (menu) {
                         menu.hidden = true;
@@ -341,6 +349,7 @@ if ($isCutPasteExercise): ?>
                     slot.innerHTML = '';
                     slot.appendChild(source);
                     source.removeAttribute('data-cut-source');
+                    source.classList.remove('is-cut');
                     source.disabled = true;
                     source.setAttribute('aria-hidden', 'true');
                     slot.classList.add('is-filled');
