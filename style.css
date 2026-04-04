@@ -281,13 +281,53 @@ body {
     font-weight: bold;
 }
 
+.completion-hideable {
+    transition: opacity 0.25s ease;
+}
+
 .success-message {
     display: none;
     margin-top: 20px;
+    padding: 20px 24px;
     text-align: center;
     font-size: 30px;
     font-weight: bold;
     color: #2e7d32;
+    background: linear-gradient(140deg, #eff9f0 0%, #ffffff 100%);
+    border: 2px solid #7cc47f;
+    border-radius: 16px;
+    box-shadow: 0 12px 22px rgba(46, 125, 50, 0.18);
+}
+
+.exercise-complete .completion-hideable {
+    display: none;
+}
+
+.exercise-complete .success-message {
+    display: block;
+    animation: success-pop 360ms ease-out both;
+}
+
+@keyframes success-pop {
+    from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .completion-hideable {
+        transition: none;
+    }
+
+    .exercise-complete .success-message {
+        animation: none;
+    }
 }
 
 .error-box {

@@ -57,7 +57,8 @@ if ($isRightClickExercise) {
 ob_start();
 
 if ($isRightClickExercise): ?>
-    <div class="exercise-zone" id="exercise-zone">
+    <div id="right-click-exercise">
+    <div class="exercise-zone completion-hideable" id="exercise-zone">
         <?php for ($i = 1; $i <= $items; $i++): ?>
             <div class="smiley-item context-target" data-item>
                 <div class="smiley-helper">Supprimez-moi !</div>
@@ -91,11 +92,11 @@ if ($isRightClickExercise): ?>
         <?php endfor; ?>
     </div>
 
-    <div class="status-box">
+    <div class="status-box completion-hideable">
         Restants : <span id="remaining-count"><?= (int) $items ?></span> / <?= (int) $items ?>
     </div>
 
-    <div class="menu-note" id="menu-note">
+    <div class="menu-note completion-hideable" id="menu-note">
         Astuce : faites d’abord un clic droit sur le smiley.
     </div>
 
@@ -132,18 +133,20 @@ if ($isRightClickExercise): ?>
             </a>
         <?php endif; ?>
     </div>
+    </div>
 
     <script>
         (function () {
             'use strict';
 
+            const exercise = document.getElementById('right-click-exercise');
             const zone = document.getElementById('exercise-zone');
             const remainingCount = document.getElementById('remaining-count');
             const successMessage = document.getElementById('success-message');
             const menuNote = document.getElementById('menu-note');
             const nextStepButton = document.getElementById('next-step-button');
 
-            if (!zone) {
+            if (!zone || !exercise) {
                 return;
             }
 
@@ -157,6 +160,11 @@ if ($isRightClickExercise): ?>
                 nextStepButton.classList.remove('is-disabled');
                 nextStepButton.removeAttribute('aria-disabled');
                 nextStepButton.removeAttribute('tabindex');
+            }
+
+            function completeExercise() {
+                exercise.classList.add('exercise-complete');
+                enableNextStep();
             }
 
             function closeAllMenus() {
@@ -247,11 +255,10 @@ if ($isRightClickExercise): ?>
                     }
 
                     if (remaining <= 0 && successMessage) {
-                        successMessage.style.display = 'block';
+                        completeExercise();
                         if (menuNote) {
                             menuNote.textContent = 'Exercice terminé.';
                         }
-                        enableNextStep();
                     }
 
                     return;

@@ -57,7 +57,8 @@ if ($isLeftClickExercise) {
 ob_start();
 
 if ($isLeftClickExercise): ?>
-    <div class="exercise-zone" id="exercise-zone">
+    <div id="click-left-exercise">
+    <div class="exercise-zone completion-hideable" id="exercise-zone">
         <?php for ($i = 1; $i <= $items; $i++): ?>
             <div class="smiley-item" data-item>
                 <div class="smiley-helper">Cliquez-moi !</div>
@@ -83,7 +84,7 @@ if ($isLeftClickExercise): ?>
         <?php endfor; ?>
     </div>
 
-    <div class="status-box">
+    <div class="status-box completion-hideable">
         Restants : <span id="remaining-count"><?= (int) $items ?></span> / <?= (int) $items ?>
     </div>
 
@@ -120,17 +121,19 @@ if ($isLeftClickExercise): ?>
             </a>
         <?php endif; ?>
     </div>
+    </div>
 
     <script>
         (function () {
             'use strict';
 
+            const exercise = document.getElementById('click-left-exercise');
             const zone = document.getElementById('exercise-zone');
             const remainingCount = document.getElementById('remaining-count');
             const successMessage = document.getElementById('success-message');
             const nextStepButton = document.getElementById('next-step-button');
 
-            if (!zone) {
+            if (!zone || !exercise) {
                 return;
             }
 
@@ -144,6 +147,11 @@ if ($isLeftClickExercise): ?>
                 nextStepButton.classList.remove('is-disabled');
                 nextStepButton.removeAttribute('aria-disabled');
                 nextStepButton.removeAttribute('tabindex');
+            }
+
+            function completeExercise() {
+                exercise.classList.add('exercise-complete');
+                enableNextStep();
             }
 
             zone.addEventListener('click', function (event) {
@@ -170,8 +178,7 @@ if ($isLeftClickExercise): ?>
                 }
 
                 if (remaining <= 0 && successMessage) {
-                    successMessage.style.display = 'block';
-                    enableNextStep();
+                    completeExercise();
                 }
             });
 
