@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercices souris</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="mode-classic">
+
+<header class="site-header">
+    Exercices souris</header>
+
+<div class="page-wrapper">
+    <main class="main-content">
+        <section class="card">
+            <h1 class="exercise-title">
+                Clic            </h1>
+        </section>
+
+        <section class="card" id="exercise-instruction-card">
+            <p class="instruction">
+                Placez l’index sur le bouton gauche de la souris, puis cliquez sur chaque smiley pour le faire disparaître.            </p>
+        </section>
+
+        <section class="card feedback-card is-hidden" id="exercise-feedback-card" aria-live="polite">
+            <p class="feedback-message" id="exercise-feedback-message"></p>
+        </section>
+
+        <section class="card">
+                <div id="click-left-exercise">
+
+    
+    <div class="exercise-zone completion-hideable" id="exercise-zone">
+                    <div class="smiley-item" data-item>
+                <div class="action-label">Cliquez-moi !</div>
+
+                <button
+                    type="button"
+                    class="smiley-btn"
+                    data-action="click-left"
+                    aria-label="Smiley 1"
+                >
+                    <span
+                        class="smiley"
+                        style="width: 100px; height: 100px;"
+                    >
+                        <span class="smiley-face">
+                            <span class="eye left"></span>
+                            <span class="eye right"></span>
+                            <span class="mouth"></span>
+                        </span>
+                    </span>
+                </button>
+            </div>
+                    <div class="smiley-item" data-item>
+                <div class="action-label">Cliquez-moi !</div>
+
+                <button
+                    type="button"
+                    class="smiley-btn"
+                    data-action="click-left"
+                    aria-label="Smiley 2"
+                >
+                    <span
+                        class="smiley"
+                        style="width: 100px; height: 100px;"
+                    >
+                        <span class="smiley-face">
+                            <span class="eye left"></span>
+                            <span class="eye right"></span>
+                            <span class="mouth"></span>
+                        </span>
+                    </span>
+                </button>
+            </div>
+                    <div class="smiley-item" data-item>
+                <div class="action-label">Cliquez-moi !</div>
+
+                <button
+                    type="button"
+                    class="smiley-btn"
+                    data-action="click-left"
+                    aria-label="Smiley 3"
+                >
+                    <span
+                        class="smiley"
+                        style="width: 100px; height: 100px;"
+                    >
+                        <span class="smiley-face">
+                            <span class="eye left"></span>
+                            <span class="eye right"></span>
+                            <span class="mouth"></span>
+                        </span>
+                    </span>
+                </button>
+            </div>
+                    <div class="smiley-item" data-item>
+                <div class="action-label">Cliquez-moi !</div>
+
+                <button
+                    type="button"
+                    class="smiley-btn"
+                    data-action="click-left"
+                    aria-label="Smiley 4"
+                >
+                    <span
+                        class="smiley"
+                        style="width: 100px; height: 100px;"
+                    >
+                        <span class="smiley-face">
+                            <span class="eye left"></span>
+                            <span class="eye right"></span>
+                            <span class="mouth"></span>
+                        </span>
+                    </span>
+                </button>
+            </div>
+                    <div class="smiley-item" data-item>
+                <div class="action-label">Cliquez-moi !</div>
+
+                <button
+                    type="button"
+                    class="smiley-btn"
+                    data-action="click-left"
+                    aria-label="Smiley 5"
+                >
+                    <span
+                        class="smiley"
+                        style="width: 100px; height: 100px;"
+                    >
+                        <span class="smiley-face">
+                            <span class="eye left"></span>
+                            <span class="eye right"></span>
+                            <span class="mouth"></span>
+                        </span>
+                    </span>
+                </button>
+            </div>
+                    <div class="smiley-item" data-item>
+                <div class="action-label">Cliquez-moi !</div>
+
+                <button
+                    type="button"
+                    class="smiley-btn"
+                    data-action="click-left"
+                    aria-label="Smiley 6"
+                >
+                    <span
+                        class="smiley"
+                        style="width: 100px; height: 100px;"
+                    >
+                        <span class="smiley-face">
+                            <span class="eye left"></span>
+                            <span class="eye right"></span>
+                            <span class="mouth"></span>
+                        </span>
+                    </span>
+                </button>
+            </div>
+            </div>
+
+    <div class="status-box completion-hideable remaining-box" aria-hidden="true">
+        Restants : <span id="remaining-count">6</span> / 6    </div>
+    <div class="controls">
+        
+        <a
+            class="btn btn-orange"
+            href="?action=click-left&items=6&size=100&mode=classic"
+        >
+            Recommencer
+        </a>
+
+            </div>
+
+
+    </div>
+
+    <script>
+        (function () {
+            'use strict';
+
+            const exercise = document.getElementById('click-left-exercise');
+            const zone = document.getElementById('exercise-zone');
+            const remainingCount = document.getElementById('remaining-count');
+            const nextStepButton = document.getElementById('next-step-button');
+            const instructionCard = document.getElementById('exercise-instruction-card');
+            const feedbackCard = document.getElementById('exercise-feedback-card');
+            const feedbackMessage = document.getElementById('exercise-feedback-message');
+            const countdownValue = document.getElementById('countdown-value');
+            const countdownProgress = document.getElementById('countdown-progress');
+            const restartButton = exercise.querySelector('.btn-orange');
+
+            if (!zone || !exercise) {
+                return;
+            }
+
+            let remaining = zone.querySelectorAll('[data-item]').length;
+            let isGameOver = false;
+            let isCompleted = false;
+            let timerId = null;
+            let remainingSeconds = null;
+            const initialSeconds = typeof remainingSeconds === 'number' ? remainingSeconds : null;
+
+            function enableNextStep() {
+                if (!nextStepButton) {
+                    return;
+                }
+
+                nextStepButton.classList.remove('is-hidden');
+            }
+
+            function showFeedback(message, stateClass) {
+                if (instructionCard) {
+                    instructionCard.classList.add('is-hidden');
+                }
+
+                if (!feedbackCard || !feedbackMessage) {
+                    return;
+                }
+
+                feedbackMessage.textContent = message;
+                feedbackCard.classList.remove('is-hidden', 'is-success-feedback', 'is-timeout-feedback');
+                feedbackCard.classList.add(stateClass);
+            }
+
+            function completeExercise() {
+                if (isGameOver || isCompleted) {
+                    return;
+                }
+                isCompleted = true;
+                if (timerId !== null) {
+                    window.clearInterval(timerId);
+                }
+                enableNextStep();
+                showFeedback('Bravo ! Tous les smileys ont été cliqués.', 'is-success-feedback');
+            }
+
+            function handleGameOver() {
+                if (isCompleted || isGameOver) {
+                    return;
+                }
+                isGameOver = true;
+                if (timerId !== null) {
+                    window.clearInterval(timerId);
+                }
+
+                exercise.querySelectorAll('.controls .btn').forEach(function (button) {
+                    if (button === restartButton) {
+                        return;
+                    }
+                    button.classList.add('is-hidden');
+                    button.setAttribute('aria-hidden', 'true');
+                });
+
+                showFeedback('Temps écoulé. Vous pouvez recommencer.', 'is-timeout-feedback');
+            }
+
+            function formatSeconds(value) {
+                const normalizedValue = Number.isFinite(value) ? Math.max(0, value) : 0;
+                return String(Math.round(normalizedValue));
+            }
+
+            function updateProgressBar() {
+                if (!countdownProgress || typeof initialSeconds !== 'number' || initialSeconds <= 0) {
+                    return;
+                }
+
+                const ratio = Math.max(0, Math.min(1, remainingSeconds / initialSeconds));
+                countdownProgress.style.width = (ratio * 100).toFixed(1) + '%';
+            }
+
+            if (typeof remainingSeconds === 'number' && countdownValue) {
+                updateProgressBar();
+                timerId = window.setInterval(function () {
+                    if (isCompleted || isGameOver) {
+                        return;
+                    }
+
+                    remainingSeconds = Math.max(0, Number((remainingSeconds - 0.1).toFixed(1)));
+                    countdownValue.textContent = formatSeconds(remainingSeconds);
+                    updateProgressBar();
+
+                    if (remainingSeconds <= 0) {
+                        handleGameOver();
+                    }
+                }, 100);
+            }
+
+            zone.addEventListener('click', function (event) {
+                if (isGameOver || isCompleted) {
+                    return;
+                }
+                const button = event.target.closest('.smiley-btn');
+
+                if (!button) {
+                    return;
+                }
+
+                const item = button.closest('[data-item]');
+                if (!item) {
+                    return;
+                }
+
+                if (item.classList.contains('is-done')) {
+                    return;
+                }
+
+                item.classList.add('is-done');
+                remaining--;
+
+                if (remainingCount) {
+                    remainingCount.textContent = String(remaining);
+                }
+
+                if (remaining <= 0) {
+                    completeExercise();
+                }
+            });
+
+            zone.addEventListener('contextmenu', function (event) {
+                const button = event.target.closest('.smiley-btn');
+
+                if (!button) {
+                    return;
+                }
+
+                event.preventDefault();
+            });
+        })();
+    </script>
+        </section>
+    </main>
+
+    <aside class="sidebar">
+        <h2>Exercices</h2>
+        <div class="sidebar-box">
+            <nav class="exercise-menu" aria-label="Choisir un exercice"><ul class="exercise-menu-list"><li class="exercise-menu-item"><a class="exercise-menu-link is-active" href="click-left.html?action=click-left&amp;items=4&amp;size=100&amp;mode=classic">Clic</a></li><li class="exercise-menu-item"><a class="exercise-menu-link" href="double-click.html?action=double-click&amp;items=4&amp;size=100&amp;mode=classic">Double clic</a></li><li class="exercise-menu-item"><a class="exercise-menu-link" href="right-click.html?action=right-click&amp;items=4&amp;size=100&amp;mode=classic">Clic droit</a></li><li class="exercise-menu-item"><a class="exercise-menu-link" href="drag-drop.html?action=drag-drop&amp;items=2&amp;size=100&amp;mode=classic">Glisser déposer</a></li><li class="exercise-menu-item"><a class="exercise-menu-link" href="copy-paste.html?action=copy-paste&amp;items=2&amp;size=100&amp;mode=classic">Copier coller</a></li><li class="exercise-menu-item"><a class="exercise-menu-link" href="cut-paste.html?action=cut-paste&amp;items=2&amp;size=100&amp;mode=classic">Couper coller</a></li></ul><details class="exercise-mode-toggle"><summary aria-label="Afficher ou masquer les modes"><span class="exercise-mode-toggle-label-plus">Plus</span><span class="exercise-mode-toggle-label-minus">Moins</span></summary><div class="exercise-mode-list" aria-label="Choisir un mode"><a class="exercise-mode-link is-active" href="click-left.html?action=click-left&amp;items=4&amp;size=100&amp;mode=classic">Classique</a><a class="exercise-mode-link" href="click-left.html?action=click-left&amp;items=4&amp;size=100&amp;mode=chrono-beginner">Chrono Débutant</a><a class="exercise-mode-link" href="click-left.html?action=click-left&amp;items=4&amp;size=100&amp;mode=chrono-normal">Chrono Normal</a><a class="exercise-mode-link" href="click-left.html?action=click-left&amp;items=4&amp;size=100&amp;mode=chrono-expert">Chrono Expert</a></div></details></nav>        </div>
+    </aside>
+</div>
+
+<footer class="footer">
+    Exercices souris pour l’apprentissage
+</footer>
+
+</body>
+</html>

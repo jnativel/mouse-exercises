@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercices souris</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="mode-classic">
+
+<header class="site-header">
+    Exercices souris</header>
+
+<div class="page-wrapper">
+    <main class="main-content">
+        <section class="card">
+            <h1 class="exercise-title">
+                Couper / coller            </h1>
+        </section>
+
+        <section class="card" id="exercise-instruction-card">
+            <p class="instruction">
+                Clic droit sur le smiley, choisissez “Couper”. Puis faites un clic droit sur “Collez-moi !” et choisissez “Coller”.            </p>
+        </section>
+
+        <section class="card feedback-card is-hidden" id="exercise-feedback-card" aria-live="polite">
+            <p class="feedback-message" id="exercise-feedback-message"></p>
+        </section>
+
+        <section class="card">
+                <div class="workflow-exercise" id="cut-paste-exercise">
+        
+                    <div class="workflow-row workflow-row--copy completion-hideable" data-row data-id="item-1">
+                <div class="workflow-side copy-origin" data-copy-origin>
+                    <div class="action-label">Coupez-moi !</div>
+
+                    <div class="workflow-target">
+                        <button
+                            type="button"
+                            class="smiley-btn"
+                            data-cut-source="item-1"
+                            aria-label="Smiley à couper 1"
+                        >
+                            <span
+                                class="smiley is-purple"
+                                style="width: 100px; height: 100px;"
+                            >
+                                <span class="smiley-face">
+                                    <span class="eye left"></span>
+                                    <span class="eye right"></span>
+                                    <span class="mouth" style="border-bottom:none;border-top:4px solid #111;border-radius:50px 50px 0 0;bottom:28%;"></span>
+                                </span>
+                            </span>
+                        </button>
+
+                        <div class="context-menu" data-context-menu hidden>
+                            <button type="button" class="context-menu-item" disabled>Nouveau</button>
+                            <button type="button" class="context-menu-item" data-copy-command="cut">Couper</button>
+                            <button type="button" class="context-menu-item" disabled>Copier</button>
+                            <button type="button" class="context-menu-item" disabled>Renommer</button>
+                            <button type="button" class="context-menu-item is-separator-top" disabled>Supprimer</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="workflow-side copy-destination" data-copy-destination>
+                    <div class="action-label">Collez-moi !</div>
+
+                    <div class="workflow-target">
+                        <div class="paste-slot" data-paste-slot></div>
+
+                        <div class="context-menu" data-paste-menu hidden>
+                            <button type="button" class="context-menu-item" disabled>Annuler</button>
+                            <button type="button" class="context-menu-item is-disabled" data-paste-command="paste">Coller</button>
+                            <button type="button" class="context-menu-item" disabled>Propriétés</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                    <div class="workflow-row workflow-row--copy completion-hideable" data-row data-id="item-2">
+                <div class="workflow-side copy-origin" data-copy-origin>
+                    <div class="action-label">Coupez-moi !</div>
+
+                    <div class="workflow-target">
+                        <button
+                            type="button"
+                            class="smiley-btn"
+                            data-cut-source="item-2"
+                            aria-label="Smiley à couper 2"
+                        >
+                            <span
+                                class="smiley is-purple"
+                                style="width: 100px; height: 100px;"
+                            >
+                                <span class="smiley-face">
+                                    <span class="eye left"></span>
+                                    <span class="eye right"></span>
+                                    <span class="mouth" style="border-bottom:none;border-top:4px solid #111;border-radius:50px 50px 0 0;bottom:28%;"></span>
+                                </span>
+                            </span>
+                        </button>
+
+                        <div class="context-menu" data-context-menu hidden>
+                            <button type="button" class="context-menu-item" disabled>Nouveau</button>
+                            <button type="button" class="context-menu-item" data-copy-command="cut">Couper</button>
+                            <button type="button" class="context-menu-item" disabled>Copier</button>
+                            <button type="button" class="context-menu-item" disabled>Renommer</button>
+                            <button type="button" class="context-menu-item is-separator-top" disabled>Supprimer</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="workflow-side copy-destination" data-copy-destination>
+                    <div class="action-label">Collez-moi !</div>
+
+                    <div class="workflow-target">
+                        <div class="paste-slot" data-paste-slot></div>
+
+                        <div class="context-menu" data-paste-menu hidden>
+                            <button type="button" class="context-menu-item" disabled>Annuler</button>
+                            <button type="button" class="context-menu-item is-disabled" data-paste-command="paste">Coller</button>
+                            <button type="button" class="context-menu-item" disabled>Propriétés</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        <div class="status-box completion-hideable remaining-box" aria-hidden="true">
+            Restants : <span id="remaining-count">2</span> / 2        </div>
+        <div class="menu-note completion-hideable" id="copy-note">
+            Astuce : clic droit sur le smiley, choisissez “Couper”, puis clic droit sur “Collez-moi !” et choisissez “Coller”.
+        </div>
+
+        <div class="controls">
+                            <a
+                    class="btn btn-green"
+                    href="copy-paste.html?action=copy-paste&amp;items=8&amp;size=100&amp;mode=classic"
+                >
+                    Étape précédente
+                </a>
+            
+            <a
+                class="btn btn-orange"
+                href="?action=cut-paste&items=2&size=100&mode=classic"
+            >
+                Recommencer
+            </a>
+
+                            <a
+                    class="btn btn-green is-hidden"
+                    id="next-step-button"
+                    href="cut-paste.html?action=cut-paste&amp;items=8&amp;size=100&amp;mode=classic"
+                >
+                    Étape suivante
+                </a>
+                    </div>
+
+
+    </div>
+
+    <script>
+        (function () {
+            'use strict';
+
+            const exercise = document.getElementById('cut-paste-exercise');
+            const remainingCount = document.getElementById('remaining-count');
+            const copyNote = document.getElementById('copy-note');
+            const nextStepButton = document.getElementById('next-step-button');
+            const instructionCard = document.getElementById('exercise-instruction-card');
+            const feedbackCard = document.getElementById('exercise-feedback-card');
+            const feedbackMessage = document.getElementById('exercise-feedback-message');
+            const countdownValue = document.getElementById('countdown-value');
+            const countdownProgress = document.getElementById('countdown-progress');
+            const restartButton = exercise.querySelector('.btn-orange');
+
+            if (!exercise) {
+                return;
+            }
+
+            let cutId = null;
+            let remaining = exercise.querySelectorAll('[data-row]').length;
+            let isGameOver = false;
+            let isCompleted = false;
+            let timerId = null;
+            let remainingSeconds = null;
+            const initialSeconds = typeof remainingSeconds === 'number' ? remainingSeconds : null;
+
+            function enableNextStep() {
+                if (!nextStepButton) {
+                    return;
+                }
+
+                nextStepButton.classList.remove('is-hidden');
+            }
+
+            function showFeedback(message, stateClass) {
+                if (instructionCard) {
+                    instructionCard.classList.add('is-hidden');
+                }
+
+                if (!feedbackCard || !feedbackMessage) {
+                    return;
+                }
+
+                feedbackMessage.textContent = message;
+                feedbackCard.classList.remove('is-hidden', 'is-success-feedback', 'is-timeout-feedback');
+                feedbackCard.classList.add(stateClass);
+            }
+
+            function completeExercise() {
+                if (isGameOver || isCompleted) {
+                    return;
+                }
+                isCompleted = true;
+                if (timerId !== null) {
+                    window.clearInterval(timerId);
+                }
+                enableNextStep();
+                showFeedback('Bravo ! Tous les smileys ont été coupés puis collés.', 'is-success-feedback');
+            }
+
+            function clearCutPreview() {
+                exercise.querySelectorAll('[data-cut-source].is-cut').forEach(function (button) {
+                    button.classList.remove('is-cut');
+                });
+            }
+
+            function handleGameOver() {
+                if (isCompleted || isGameOver) {
+                    return;
+                }
+                isGameOver = true;
+                if (timerId !== null) {
+                    window.clearInterval(timerId);
+                }
+                closeAllMenus();
+                exercise.querySelectorAll('.controls .btn').forEach(function (button) {
+                    if (button === restartButton) {
+                        return;
+                    }
+                    button.classList.add('is-hidden');
+                    button.setAttribute('aria-hidden', 'true');
+                });
+                showFeedback('Temps écoulé. Vous pouvez recommencer.', 'is-timeout-feedback');
+                if (copyNote) {
+                    copyNote.textContent = 'Temps écoulé.';
+                }
+            }
+
+            function formatSeconds(value) {
+                const normalizedValue = Number.isFinite(value) ? Math.max(0, value) : 0;
+                return String(Math.round(normalizedValue));
+            }
+
+            function updateProgressBar() {
+                if (!countdownProgress || typeof initialSeconds !== 'number' || initialSeconds <= 0) {
+                    return;
+                }
+
+                const ratio = Math.max(0, Math.min(1, remainingSeconds / initialSeconds));
+                countdownProgress.style.width = (ratio * 100).toFixed(1) + '%';
+            }
+
+            if (typeof remainingSeconds === 'number' && countdownValue) {
+                updateProgressBar();
+                timerId = window.setInterval(function () {
+                    if (isCompleted || isGameOver) {
+                        return;
+                    }
+                    remainingSeconds = Math.max(0, Number((remainingSeconds - 0.1).toFixed(1)));
+                    countdownValue.textContent = formatSeconds(remainingSeconds);
+                    updateProgressBar();
+                    if (remainingSeconds <= 0) {
+                        handleGameOver();
+                    }
+                }, 100);
+            }
+
+            function closeAllMenus() {
+                exercise.querySelectorAll('[data-context-menu], [data-paste-menu]').forEach(function (menu) {
+                    menu.hidden = true;
+                });
+            }
+
+            function positionMenuAtClick(menu, event) {
+                menu.hidden = false;
+
+                const menuWidth = menu.offsetWidth;
+                const menuHeight = menu.offsetHeight;
+                const margin = 4;
+
+                const maxX = Math.max(margin, window.innerWidth - menuWidth - margin);
+                const maxY = Math.max(margin, window.innerHeight - menuHeight - margin);
+
+                const left = Math.max(margin, Math.min(event.clientX, maxX));
+                const top = Math.max(margin, Math.min(event.clientY, maxY));
+
+                menu.style.left = left + 'px';
+                menu.style.top = top + 'px';
+            }
+
+            document.addEventListener('contextmenu', function (event) {
+                if (exercise.contains(event.target)) {
+                    event.preventDefault();
+                }
+            }, true);
+
+            function canPasteInRow(row) {
+                if (!row || !cutId) {
+                    return false;
+                }
+
+                const expectedId = row.getAttribute('data-id');
+                if (!expectedId || expectedId !== cutId) {
+                    return false;
+                }
+
+                const origin = row.querySelector('[data-copy-origin]');
+                return !origin || !origin.classList.contains('is-done');
+            }
+
+            function updatePasteMenus() {
+                exercise.querySelectorAll('[data-paste-command="paste"]').forEach(function (button) {
+                    const row = button.closest('[data-row]');
+                    if (canPasteInRow(row)) {
+                        button.classList.remove('is-disabled');
+                        button.disabled = false;
+                    } else {
+                        button.classList.add('is-disabled');
+                        button.disabled = true;
+                    }
+                });
+            }
+
+            exercise.addEventListener('contextmenu', function (event) {
+                const sourceButton = event.target.closest('[data-cut-source]');
+                const pasteArea = event.target.closest('[data-copy-destination] .workflow-target, [data-paste-slot]');
+
+                event.preventDefault();
+                if (isGameOver || isCompleted) {
+                    return;
+                }
+
+                if (!sourceButton && !pasteArea) {
+                    closeAllMenus();
+                    return;
+                }
+
+                closeAllMenus();
+
+                if (sourceButton) {
+                    const row = sourceButton.closest('[data-row]');
+                    if (!row) {
+                        return;
+                    }
+
+                    const origin = row.querySelector('[data-copy-origin]');
+                    if (!origin || origin.classList.contains('is-done')) {
+                        return;
+                    }
+
+                    const menu = row.querySelector('[data-context-menu]');
+                    if (menu) {
+                        positionMenuAtClick(menu, event);
+                    }
+
+                    if (copyNote) {
+                        copyNote.textContent = 'Cliquez maintenant sur “Couper”.';
+                    }
+
+                    return;
+                }
+
+                const target = event.target.closest('[data-copy-destination]');
+                if (!target) {
+                    return;
+                }
+
+                const menu = target.querySelector('[data-paste-menu]');
+                if (!menu) {
+                    return;
+                }
+
+                updatePasteMenus();
+                positionMenuAtClick(menu, event);
+
+                if (copyNote) {
+                    copyNote.textContent = cutId
+                        ? 'Cliquez maintenant sur “Coller”.'
+                        : 'Il faut d’abord couper un smiley.';
+                }
+            });
+
+            exercise.addEventListener('click', function (event) {
+                if (isGameOver || isCompleted) {
+                    return;
+                }
+                const cutButton = event.target.closest('[data-copy-command="cut"]');
+                if (cutButton) {
+                    const row = cutButton.closest('[data-row]');
+                    if (!row) {
+                        return;
+                    }
+
+                    const source = row.querySelector('[data-cut-source]');
+                    const origin = row.querySelector('[data-copy-origin]');
+                    const menu = row.querySelector('[data-context-menu]');
+
+                    if (!source || !origin || origin.classList.contains('is-done')) {
+                        return;
+                    }
+
+                    clearCutPreview();
+                    cutId = source.getAttribute('data-cut-source');
+                    source.classList.add('is-cut');
+
+                    if (menu) {
+                        menu.hidden = true;
+                    }
+
+                    updatePasteMenus();
+
+                    if (copyNote) {
+                        copyNote.textContent = 'Très bien. Faites maintenant un clic droit sur “Collez-moi !”.';
+                    }
+
+                    return;
+                }
+
+                const pasteButton = event.target.closest('[data-paste-command="paste"]');
+                if (pasteButton) {
+                    if (!cutId) {
+                        return;
+                    }
+
+                    const row = pasteButton.closest('[data-row]');
+                    if (!row) {
+                        return;
+                    }
+
+                    const expectedId = row.getAttribute('data-id');
+                    const slot = row.querySelector('[data-paste-slot]');
+                    const pasteMenu = row.querySelector('[data-paste-menu]');
+                    const origin = row.querySelector('[data-copy-origin]');
+                    const source = row.querySelector('[data-cut-source]');
+
+                    if (!expectedId || !slot || !origin || !source || origin.classList.contains('is-done')) {
+                        return;
+                    }
+
+                    if (cutId !== expectedId) {
+                        if (pasteMenu) {
+                            pasteMenu.hidden = true;
+                        }
+                        if (copyNote) {
+                            copyNote.textContent = 'Ce n’est pas le bon smiley pour cette ligne. Recommencez.';
+                        }
+                        return;
+                    }
+
+                    slot.innerHTML = '';
+                    slot.appendChild(source);
+                    source.removeAttribute('data-cut-source');
+                    source.classList.remove('is-cut');
+                    source.disabled = true;
+                    source.setAttribute('aria-hidden', 'true');
+                    slot.classList.add('is-filled');
+
+                    origin.classList.add('is-done');
+
+                    if (pasteMenu) {
+                        pasteMenu.hidden = true;
+                    }
+
+                    cutId = null;
+                    updatePasteMenus();
+                    remaining--;
+
+                    if (remainingCount) {
+                        remainingCount.textContent = String(remaining);
+                    }
+
+                    if (copyNote && remaining > 0) {
+                        copyNote.textContent = 'Très bien. Passez à la ligne suivante.';
+                    }
+
+                    if (remaining <= 0) {
+                        completeExercise();
+                        if (copyNote) {
+                            copyNote.textContent = 'Exercice terminé.';
+                        }
+                    }
+
+                    return;
+                }
+
+                if (!event.target.closest('.context-menu') && !event.target.closest('[data-cut-source]') && !event.target.closest('[data-copy-destination]')) {
+                    closeAllMenus();
+                }
+            });
+
+            document.addEventListener('click', function (event) {
+                if (!exercise.contains(event.target)) {
+                    closeAllMenus();
+                }
+            });
+
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape') {
+                    closeAllMenus();
+                }
+            });
+
+            updatePasteMenus();
+        })();
+    </script>
+        </section>
+    </main>
+
+    <aside class="sidebar">
+        <h2>Exercices</h2>
+        <div class="sidebar-box">
+            <nav class="exercise-menu" aria-label="Choisir un exercice"><ul class="exercise-menu-list"><li class="exercise-menu-item"><a class="exercise-menu-link" href="click-left.html?action=click-left&amp;items=4&amp;size=100&amp;mode=classic">Clic</a></li><li class="exercise-menu-item"><a class="exercise-menu-link" href="double-click.html?action=double-click&amp;items=4&amp;size=100&amp;mode=classic">Double clic</a></li><li class="exercise-menu-item"><a class="exercise-menu-link" href="right-click.html?action=right-click&amp;items=4&amp;size=100&amp;mode=classic">Clic droit</a></li><li class="exercise-menu-item"><a class="exercise-menu-link" href="drag-drop.html?action=drag-drop&amp;items=2&amp;size=100&amp;mode=classic">Glisser déposer</a></li><li class="exercise-menu-item"><a class="exercise-menu-link" href="copy-paste.html?action=copy-paste&amp;items=2&amp;size=100&amp;mode=classic">Copier coller</a></li><li class="exercise-menu-item"><a class="exercise-menu-link is-active" href="cut-paste.html?action=cut-paste&amp;items=2&amp;size=100&amp;mode=classic">Couper coller</a></li></ul><details class="exercise-mode-toggle"><summary aria-label="Afficher ou masquer les modes"><span class="exercise-mode-toggle-label-plus">Plus</span><span class="exercise-mode-toggle-label-minus">Moins</span></summary><div class="exercise-mode-list" aria-label="Choisir un mode"><a class="exercise-mode-link is-active" href="cut-paste.html?action=cut-paste&amp;items=2&amp;size=100&amp;mode=classic">Classique</a><a class="exercise-mode-link" href="cut-paste.html?action=cut-paste&amp;items=2&amp;size=100&amp;mode=chrono-beginner">Chrono Débutant</a><a class="exercise-mode-link" href="cut-paste.html?action=cut-paste&amp;items=2&amp;size=100&amp;mode=chrono-normal">Chrono Normal</a><a class="exercise-mode-link" href="cut-paste.html?action=cut-paste&amp;items=2&amp;size=100&amp;mode=chrono-expert">Chrono Expert</a></div></details></nav>        </div>
+    </aside>
+</div>
+
+<footer class="footer">
+    Exercices souris pour l’apprentissage
+</footer>
+
+</body>
+</html>
